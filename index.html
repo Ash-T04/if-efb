@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Infinite Flight EFB</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white font-sans p-4 md:p-8">
+    <div class="max-w-xl mx-auto bg-slate-800 p-6 rounded-2xl border border-slate-700 shadow-2xl">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-sky-400">✈️ EFB Takeoff Calculator</h1>
+            <span class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded-full border border-slate-600">A320 / B737</span>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Gross Weight (kg)</label>
+                <input id="weight" type="number" value="72000" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Runway Length (m)</label>
+                <input id="tora" type="number" value="3000" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Outside Temp (°C)</label>
+                <input id="temp" type="number" value="15" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
+            </div>
+            <div>
+                <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Runway Condition</label>
+                <select id="condition" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
+                    <option value="dry" selected>Dry</option>
+                    <option value="wet">Wet</option>
+                </select>
+            </div>
+        </div>
+
+        <button onclick="calculatePerformance()" class="w-full mt-6 bg-sky-600 hover:bg-sky-500 font-bold py-3 rounded-xl transition duration-150 shadow-lg shadow-sky-900/50">
+            Calculate Takeoff Data
+        </button>
+
+        <div id="results" class="mt-6 p-4 bg-slate-900 rounded-xl border border-slate-700 hidden">
+            <h2 class="text-xs text-slate-500 uppercase tracking-wider mb-3 font-semibold">Calculated V-Speeds</h2>
+            <div class="grid grid-cols-3 gap-3 text-center">
+                <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 shadow-inner">
+                    <span class="text-xs text-slate-400 block">V1</span>
+                    <p id="v1" class="text-2xl font-bold text-emerald-400">-</p>
+                </div>
+                <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 shadow-inner">
+                    <span class="text-xs text-slate-400 block">VR</span>
+                    <p id="vr" class="text-2xl font-bold text-emerald-400">-</p>
+                </div>
+                <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 shadow-inner">
+                    <span class="text-xs text-slate-400 block">V2</span>
+                    <p id="v2" class="text-2xl font-bold text-emerald-400">-</p>
+                </div>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center px-2">
+                <span class="text-sm text-slate-400 font-medium">Assumed Flex Temp:</span>
+                <p id="flex" class="text-2xl font-bold text-amber-400">-</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculatePerformance() {
+            let weight = parseFloat(document.getElementById('weight').value);
+            let tora = parseFloat(document.getElementById('tora').value);
+            let temp = parseFloat(document.getElementById('temp').value);
+            
+            // Basic performance math logic
+            let baseDist = 1200 + ((weight - 60000) * 0.035);
+            let margin = tora - baseDist;
+            
+            // Calculate maximum flex temperature
+            let flex = Math.min(temp + Math.floor(margin / 18), 55);
+
+            // Output speeds to screen
+            document.getElementById('v1').innerText = Math.floor(118 + (weight/5200));
+            document.getElementById('vr').innerText = Math.floor(124 + (weight/5200));
+            document.getElementById('v2').innerText = Math.floor(130 + (weight/5200));
+            
+            // Output Flex Temp or require full TOGA thrust
+            if (flex > temp && margin > 0) {
+                document.getElementById('flex').innerText = flex + "°C";
+                document.getElementById('flex').className = "text-2xl font-bold text-amber-400";
+            } else {
+                document.getElementById('flex').innerText = "TOGA REQUIRED";
+                document.getElementById('flex').className = "text-xl font-bold text-red-500";
+            }
+            
+            // Make results visible
+            document.getElementById('results').classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
