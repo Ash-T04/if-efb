@@ -3,9 +3,48 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Infinite Flight EFB - Pro</title>
+    <title>Infinite Flight EFB - Pro Auto</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // --- 1. AIRCRAFT DATABASE (OEW & MTOW in kg) ---
+        const aircraftDB = {
+            "A318": { oew: 39500, mtow: 68000 },
+            "A319": { oew: 40800, mtow: 75500 },
+            "A320": { oew: 42600, mtow: 78000 },
+            "A321": { oew: 48500, mtow: 93500 },
+            "A333": { oew: 129400, mtow: 242000 },
+            "A339": { oew: 137000, mtow: 251000 },
+            "A359": { oew: 142400, mtow: 280000 },
+            "A388": { oew: 276800, mtow: 575000 },
+            "B737": { oew: 37784, mtow: 70080 },
+            "B738": { oew: 41413, mtow: 79015 },
+            "B752": { oew: 58440, mtow: 115680 },
+            "B763": { oew: 86070, mtow: 186880 },
+            "B772": { oew: 135800, mtow: 297550 },
+            "B77W": { oew: 167829, mtow: 351533 },
+            "B788": { oew: 119950, mtow: 227930 },
+            "B744": { oew: 183500, mtow: 396890 },
+            "CRJ2": { oew: 13835, mtow: 24041 },
+            "CRJ7": { oew: 19731, mtow: 34019 },
+            "CRJ9": { oew: 21433, mtow: 38330 },
+            "CRJX": { oew: 23179, mtow: 41640 },
+            "DH8D": { oew: 17185, mtow: 29257 },
+            "E175": { oew: 21890, mtow: 38790 },
+            "E190": { oew: 28080, mtow: 51800 },
+            "C172": { oew: 767, mtow: 1157 },
+            "TBM": { oew: 2132, mtow: 3354 },
+            "CCX": { oew: 9843, mtow: 16374 }
+        };
+
+        // --- 2. AIRPORT RUNWAY DATABASE ---
+        const airportDB = {
+            "EGLL": [ {id: "09L/27R", len: 3902}, {id: "09R/27L", len: 3658} ],
+            "KJFK": [ {id: "13R/31L", len: 4423}, {id: "04L/22R", len: 3460}, {id: "13L/31R", len: 3048}, {id: "04R/22L", len: 2560} ],
+            "KLAX": [ {id: "07L/25R", len: 3685}, {id: "07R/25L", len: 3382}, {id: "06R/24L", len: 3135}, {id: "06L/24R", len: 2720} ],
+            "YSSY": [ {id: "16R/34L", len: 3962}, {id: "16L/34R", len: 2438}, {id: "07/25", len: 2530} ],
+            "OMDB": [ {id: "12L/30R", len: 4000}, {id: "12R/30L", len: 4000} ]
+        };
+
         // Tab switching logic
         function switchTab(tabName) {
             document.getElementById('takeoff-section').classList.add('hidden');
@@ -17,7 +56,38 @@
             document.getElementById(tabName + '-tab').classList.add('bg-sky-600', 'text-white');
         }
 
-        // Toggle Manual Runway Entry
+        // Auto-fetch runways based on ICAO input
+        function autoFetchRunways(type) {
+            let icao = document.getElementById(type + '-icao').value.toUpperCase();
+            let selectBox = document.getElementById(type + '-rwy-select');
+            let manualBox = document.getElementById(type + '-rwy-manual');
+            
+            // Clear current options
+            selectBox.innerHTML = '';
+
+            if (airportDB[icao]) {
+                airportDB[icao].forEach(rwy => {
+                    let option = document.createElement("option");
+                    option.value = rwy.len;
+                    option.text = `${rwy.id} (${rwy.len}m)`;
+                    selectBox.appendChild(option);
+                });
+                let manualOpt = document.createElement("option");
+                manualOpt.value = "manual";
+                manualOpt.text = "Other (Manual Entry)";
+                selectBox.appendChild(manualOpt);
+                
+                manualBox.classList.add('hidden');
+            } else {
+                let manualOpt = document.createElement("option");
+                manualOpt.value = "manual";
+                manualOpt.text = "Airport not in DB (Manual Entry)";
+                selectBox.appendChild(manualOpt);
+                manualBox.classList.remove('hidden');
+            }
+        }
+
+        // Toggle Manual Runway Entry Box
         function checkRunwayManual(type) {
             let select = document.getElementById(type + '-rwy-select');
             let manual = document.getElementById(type + '-rwy-manual');
@@ -28,48 +98,68 @@
             }
         }
 
+        // Calculate Gross Weight from Load Percentage
+        function calculateCurrentWeight(loadPercentage) {
+            let acType = document.getElementById('aircraft-select').value;
+            let acData = aircraftDB[acType];
+            let loadDecimal = loadPercentage / 100;
+            return acData.oew + (loadDecimal * (acData.mtow - acData.oew));
+        }
+
         // Takeoff Calculator
         function calculateTakeoff() {
-            let weight = parseFloat(document.getElementById('tk-weight').value);
+            let loadPct = parseFloat(document.getElementById('tk-load').value);
             let rwySelect = document.getElementById('dep-rwy-select').value;
             let tora = rwySelect === "manual" ? parseFloat(document.getElementById('dep-rwy-manual').value) : parseFloat(rwySelect);
             let temp = parseFloat(document.getElementById('tk-temp').value);
             
-            if (!tora || !weight) return alert("Please enter weight and runway length.");
+            if (!tora || isNaN(loadPct) || loadPct < 0 || loadPct > 100) return alert("Please enter a valid Load % (0-100) and Runway Length.");
 
+            let weight = calculateCurrentWeight(loadPct);
             let baseDist = 1200 + ((weight - 60000) * 0.035);
             let margin = tora - baseDist;
             let flex = Math.min(temp + Math.floor(margin / 18), 55);
+
+            // N1 Calculation (Base TOGA 101.5%, reduced by flex differential)
+            let targetN1 = Math.max(85, (101.5 - ((flex - temp) * 0.25))).toFixed(1);
 
             document.getElementById('v1').innerText = Math.floor(118 + (weight/5200));
             document.getElementById('vr').innerText = Math.floor(124 + (weight/5200));
             document.getElementById('v2').innerText = Math.floor(130 + (weight/5200));
             
             let flexEl = document.getElementById('flex');
+            let n1El = document.getElementById('tk-n1');
+            
             if (flex > temp && margin > 0) {
                 flexEl.innerText = flex + "°C";
                 flexEl.className = "text-2xl font-bold text-amber-400";
+                n1El.innerText = targetN1 + "%";
             } else {
                 flexEl.innerText = "TOGA REQUIRED";
                 flexEl.className = "text-xl font-bold text-red-500";
+                n1El.innerText = "101.5%";
             }
+            
+            document.getElementById('tk-calculated-weight').innerText = `Computed Gross Weight: ${Math.floor(weight).toLocaleString()} kg`;
             document.getElementById('takeoff-results').classList.remove('hidden');
         }
 
         // Landing Calculator
         function calculateLanding() {
-            let weight = parseFloat(document.getElementById('ld-weight').value);
+            let loadPct = parseFloat(document.getElementById('ld-load').value);
             let rwySelect = document.getElementById('arr-rwy-select').value;
             let lda = rwySelect === "manual" ? parseFloat(document.getElementById('arr-rwy-manual').value) : parseFloat(rwySelect);
             let autobrake = parseFloat(document.getElementById('autobrake').value);
-            let condition = parseFloat(document.getElementById('ld-condition').value);
+            let reverseThrustMult = parseFloat(document.getElementById('ld-reverse').value);
 
-            if (!lda || !weight) return alert("Please enter landing weight and runway length.");
+            if (!lda || isNaN(loadPct) || loadPct < 0 || loadPct > 100) return alert("Please enter a valid Load % (0-100) and Runway Length.");
 
-            // Landing calculation math
+            let weight = calculateCurrentWeight(loadPct);
             let vref = Math.floor(125 + (weight/5500));
+            
+            // Base LDR calculation influenced by autobrake and reverse thrust setting
             let baseLdr = 900 + ((weight - 50000) * 0.02);
-            let requiredDist = baseLdr * autobrake * condition;
+            let requiredDist = baseLdr * autobrake * reverseThrustMult;
             let margin = lda - requiredDist;
 
             document.getElementById('vref').innerText = vref + " kt";
@@ -83,6 +173,8 @@
                 marginEl.innerText = Math.floor(margin) + " m (OVERRUN RISK)";
                 marginEl.className = "text-xl font-bold text-red-500";
             }
+            
+            document.getElementById('ld-calculated-weight').innerText = `Computed Landing Weight: ${Math.floor(weight).toLocaleString()} kg`;
             document.getElementById('landing-results').classList.remove('hidden');
         }
     </script>
@@ -93,13 +185,13 @@
         <!-- Header & Tabs -->
         <div class="p-6 pb-0">
             <div class="flex justify-between items-center mb-6">
-                <h1 class="text-2xl font-bold text-sky-400">✈️ EFB Pro Calculator</h1>
-                <span class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded-full border border-slate-600">IF Connect Ready</span>
+                <h1 class="text-2xl font-bold text-sky-400">✈️ EFB Auto-Perf Calculator</h1>
+                <span class="text-xs bg-slate-700 text-slate-300 px-2.5 py-1 rounded-full border border-slate-600">v4.0</span>
             </div>
             
             <!-- Aircraft Selector -->
             <div class="mb-6">
-                <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Aircraft Type</label>
+                <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Aircraft Type (Sets OEW & MTOW)</label>
                 <select id="aircraft-select" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
                     <optgroup label="Airbus">
                         <option value="A318">A318-100</option>
@@ -121,6 +213,15 @@
                         <option value="B788">787-8 Dreamliner</option>
                         <option value="B744">747-400</option>
                     </optgroup>
+                    <optgroup label="Bombardier / Embraer">
+                        <option value="CRJ2">CRJ-200</option>
+                        <option value="CRJ7">CRJ-700</option>
+                        <option value="CRJ9">CRJ-900</option>
+                        <option value="CRJX">CRJ-1000</option>
+                        <option value="DH8D">Dash 8 Q400</option>
+                        <option value="E175">E175</option>
+                        <option value="E190">E190</option>
+                    </optgroup>
                     <optgroup label="General Aviation / Other">
                         <option value="C172">Cessna 172</option>
                         <option value="TBM">TBM-930</option>
@@ -141,20 +242,18 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Departure ICAO</label>
-                    <input type="text" placeholder="e.g. EGLL" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 uppercase outline-none">
+                    <input id="dep-icao" type="text" onkeyup="autoFetchRunways('dep')" placeholder="e.g. EGLL or KJFK" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 uppercase outline-none">
                 </div>
                 <div>
                     <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Dep Runway (TORA)</label>
                     <select id="dep-rwy-select" onchange="checkRunwayManual('dep')" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
-                        <option value="3902">27R (3,902m)</option>
-                        <option value="3658">27L (3,658m)</option>
-                        <option value="manual">Other (Manual Entry)</option>
+                        <option value="manual">Awaiting ICAO...</option>
                     </select>
-                    <input id="dep-rwy-manual" type="number" placeholder="Enter TORA in meters" class="w-full bg-slate-900 p-3 mt-2 rounded-lg text-white border border-slate-700 hidden outline-none">
+                    <input id="dep-rwy-manual" type="number" placeholder="Enter TORA in meters" class="w-full bg-slate-900 p-3 mt-2 rounded-lg text-white border border-slate-700 outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Gross Weight (kg)</label>
-                    <input id="tk-weight" type="number" value="72000" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
+                    <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Aircraft Load (%)</label>
+                    <input id="tk-load" type="number" placeholder="0-100" value="65" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">OAT (°C)</label>
@@ -168,7 +267,8 @@
 
             <!-- Takeoff Results -->
             <div id="takeoff-results" class="mt-6 p-4 bg-slate-900 rounded-xl border border-slate-700 hidden">
-                <div class="grid grid-cols-3 gap-3 text-center">
+                <p id="tk-calculated-weight" class="text-xs text-slate-400 mb-3 font-mono"></p>
+                <div class="grid grid-cols-3 gap-3 text-center mb-4">
                     <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
                         <span class="text-xs text-slate-400 block">V1</span>
                         <p id="v1" class="text-2xl font-bold text-emerald-400">-</p>
@@ -182,9 +282,16 @@
                         <p id="v2" class="text-2xl font-bold text-emerald-400">-</p>
                     </div>
                 </div>
-                <div class="mt-4 pt-3 border-t border-slate-800 flex justify-between items-center px-2">
-                    <span class="text-sm text-slate-400 font-medium">Assumed Flex Temp:</span>
-                    <p id="flex" class="text-2xl font-bold text-amber-400">-</p>
+                
+                <div class="grid grid-cols-2 gap-4 border-t border-slate-800 pt-4">
+                    <div class="text-center">
+                        <span class="text-xs text-slate-400 uppercase tracking-wide">Assumed Flex Temp</span>
+                        <p id="flex" class="text-2xl font-bold text-amber-400">-</p>
+                    </div>
+                    <div class="text-center">
+                        <span class="text-xs text-slate-400 uppercase tracking-wide">Target Takeoff N1</span>
+                        <p id="tk-n1" class="text-2xl font-bold text-sky-400">-</p>
+                    </div>
                 </div>
             </div>
         </div>
@@ -194,20 +301,18 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Arrival ICAO</label>
-                    <input type="text" placeholder="e.g. KJFK" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 uppercase outline-none">
+                    <input id="arr-icao" type="text" onkeyup="autoFetchRunways('arr')" placeholder="e.g. KLAX or OMDB" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 uppercase outline-none">
                 </div>
                 <div>
                     <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Arr Runway (LDA)</label>
                     <select id="arr-rwy-select" onchange="checkRunwayManual('arr')" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
-                        <option value="4423">13R (4,423m)</option>
-                        <option value="3460">04L (3,460m)</option>
-                        <option value="manual">Other (Manual Entry)</option>
+                        <option value="manual">Awaiting ICAO...</option>
                     </select>
-                    <input id="arr-rwy-manual" type="number" placeholder="Enter LDA in meters" class="w-full bg-slate-900 p-3 mt-2 rounded-lg text-white border border-slate-700 hidden outline-none">
+                    <input id="arr-rwy-manual" type="number" placeholder="Enter LDA in meters" class="w-full bg-slate-900 p-3 mt-2 rounded-lg text-white border border-slate-700 outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Est Landing Weight (kg)</label>
-                    <input id="ld-weight" type="number" value="64000" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
+                    <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Est Landing Load (%)</label>
+                    <input id="ld-load" type="number" placeholder="0-100" value="40" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Autobrake</label>
@@ -218,11 +323,12 @@
                     </select>
                 </div>
                 <div class="md:col-span-2">
-                    <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Runway Condition</label>
-                    <select id="ld-condition" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
-                        <option value="1.0" selected>Dry (Standard Braking)</option>
-                        <option value="1.3">Wet (Reduced Braking)</option>
-                        <option value="1.8">Icy / Snow (Poor Braking)</option>
+                    <label class="block text-xs text-slate-400 mb-1 uppercase font-semibold">Reverse Thrust Level</label>
+                    <select id="ld-reverse" class="w-full bg-slate-900 p-3 rounded-lg text-white border border-slate-700 focus:border-sky-500 outline-none">
+                        <option value="1.15">Idle Reverse (Minimal Braking)</option>
+                        <option value="1.05">60% N1</option>
+                        <option value="0.95" selected>80% N1 (Standard Braking)</option>
+                        <option value="0.90">MAX Reverse (Heavy Braking)</option>
                     </select>
                 </div>
             </div>
@@ -233,6 +339,7 @@
 
             <!-- Landing Results -->
             <div id="landing-results" class="mt-6 p-4 bg-slate-900 rounded-xl border border-slate-700 hidden">
+                <p id="ld-calculated-weight" class="text-xs text-slate-400 mb-3 font-mono"></p>
                 <div class="grid grid-cols-2 gap-3 text-center">
                     <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
                         <span class="text-xs text-slate-400 block">Approach Speed (VREF)</span>
