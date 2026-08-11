@@ -16,7 +16,7 @@
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
     <script>
-        // --- 1. AIRCRAFT DATABASE ---
+        // --- 1. AIRCRAFT DATABASE (Complete IF Fleet) ---
         const aircraftDB = {
             // Airbus
             "A223": { oew: 37080, mtow: 67585, vBase: 115, vSpread: 30, todBase: 900, todSpread: 800, ldrBase: 900, ldrSpread: 600, flaps: "airbus", burn: 1800 },
@@ -31,58 +31,86 @@
             "A359": { oew: 142400, mtow: 280000, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1300, ldrBase: 1300, ldrSpread: 1000, flaps: "airbus", burn: 5800 },
             "A388": { oew: 276800, mtow: 575000, vBase: 140, vSpread: 45, todBase: 2000, todSpread: 1400, ldrBase: 1500, ldrSpread: 1200, flaps: "airbus", burn: 11500 },
             // Boeing
-            "B712": { oew: 30440, mtow: 54930, vBase: 115, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "boeing", burn: 2000 },
-            "B737": { oew: 37784, mtow: 70080, vBase: 115, vSpread: 30, todBase: 1000, todSpread: 900, ldrBase: 900, ldrSpread: 600, flaps: "boeing", burn: 2200 },
-            "B738": { oew: 41413, mtow: 79015, vBase: 120, vSpread: 35, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "boeing", burn: 2500 },
-            "B38M": { oew: 45070, mtow: 82190, vBase: 120, vSpread: 35, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "boeing", burn: 2150 },
-            "B739": { oew: 44676, mtow: 85139, vBase: 125, vSpread: 35, todBase: 1300, todSpread: 1100, ldrBase: 1100, ldrSpread: 750, flaps: "boeing", burn: 2600 },
-            "B752": { oew: 58440, mtow: 115680, vBase: 120, vSpread: 35, todBase: 1300, todSpread: 900, ldrBase: 1100, ldrSpread: 700, flaps: "boeing", burn: 3200 },
-            "B763": { oew: 86070, mtow: 186880, vBase: 125, vSpread: 35, todBase: 1500, todSpread: 1000, ldrBase: 1200, ldrSpread: 800, flaps: "boeing", burn: 4800 },
-            "B772": { oew: 135800, mtow: 297550, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1200, ldrBase: 1300, ldrSpread: 900, flaps: "boeing", burn: 6500 },
-            "B77F": { oew: 144400, mtow: 347800, vBase: 135, vSpread: 45, todBase: 1700, todSpread: 1300, ldrBase: 1350, ldrSpread: 950, flaps: "boeing", burn: 7000 },
-            "B77W": { oew: 167829, mtow: 351533, vBase: 135, vSpread: 45, todBase: 1800, todSpread: 1400, ldrBase: 1400, ldrSpread: 1000, flaps: "boeing", burn: 7500 },
-            "B788": { oew: 119950, mtow: 227930, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1100, ldrBase: 1300, ldrSpread: 800, flaps: "boeing", burn: 4800 },
-            "B789": { oew: 128850, mtow: 254011, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1200, ldrBase: 1350, ldrSpread: 850, flaps: "boeing", burn: 5200 },
-            "B78X": { oew: 135500, mtow: 254011, vBase: 140, vSpread: 40, todBase: 1800, todSpread: 1300, ldrBase: 1400, ldrSpread: 900, flaps: "boeing", burn: 5600 },
-            "B744": { oew: 183500, mtow: 396890, vBase: 135, vSpread: 45, todBase: 1900, todSpread: 1300, ldrBase: 1500, ldrSpread: 1100, flaps: "boeing", burn: 10500 },
-            "B748": { oew: 220100, mtow: 447700, vBase: 140, vSpread: 45, todBase: 2000, todSpread: 1400, ldrBase: 1550, ldrSpread: 1150, flaps: "boeing", burn: 10000 },
+            "B712": { oew: 30440, mtow: 54930, vBase: 115, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "boeing_737", burn: 2000 },
+            "B737": { oew: 37784, mtow: 70080, vBase: 115, vSpread: 30, todBase: 1000, todSpread: 900, ldrBase: 900, ldrSpread: 600, flaps: "boeing_737", burn: 2200 },
+            "B738": { oew: 41413, mtow: 79015, vBase: 120, vSpread: 35, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "boeing_737", burn: 2500 },
+            "B38M": { oew: 45070, mtow: 82190, vBase: 120, vSpread: 35, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "boeing_737", burn: 2150 },
+            "B739": { oew: 44676, mtow: 85139, vBase: 125, vSpread: 35, todBase: 1300, todSpread: 1100, ldrBase: 1100, ldrSpread: 750, flaps: "boeing_737", burn: 2600 },
+            "B752": { oew: 58440, mtow: 115680, vBase: 120, vSpread: 35, todBase: 1300, todSpread: 900, ldrBase: 1100, ldrSpread: 700, flaps: "boeing_heavy", burn: 3200 },
+            "B763": { oew: 86070, mtow: 186880, vBase: 125, vSpread: 35, todBase: 1500, todSpread: 1000, ldrBase: 1200, ldrSpread: 800, flaps: "boeing_heavy", burn: 4800 },
+            "B772": { oew: 135800, mtow: 297550, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1200, ldrBase: 1300, ldrSpread: 900, flaps: "boeing_heavy", burn: 6500 },
+            "B77F": { oew: 144400, mtow: 347800, vBase: 135, vSpread: 45, todBase: 1700, todSpread: 1300, ldrBase: 1350, ldrSpread: 950, flaps: "boeing_heavy", burn: 7000 },
+            "B77W": { oew: 167829, mtow: 351533, vBase: 135, vSpread: 45, todBase: 1800, todSpread: 1400, ldrBase: 1400, ldrSpread: 1000, flaps: "boeing_heavy", burn: 7500 },
+            "B788": { oew: 119950, mtow: 227930, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1100, ldrBase: 1300, ldrSpread: 800, flaps: "boeing_heavy", burn: 4800 },
+            "B789": { oew: 128850, mtow: 254011, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1200, ldrBase: 1350, ldrSpread: 850, flaps: "boeing_heavy", burn: 5200 },
+            "B78X": { oew: 135500, mtow: 254011, vBase: 140, vSpread: 40, todBase: 1800, todSpread: 1300, ldrBase: 1400, ldrSpread: 900, flaps: "boeing_heavy", burn: 5600 },
+            "B744": { oew: 183500, mtow: 396890, vBase: 135, vSpread: 45, todBase: 1900, todSpread: 1300, ldrBase: 1500, ldrSpread: 1100, flaps: "boeing_heavy", burn: 10500 },
+            "B748": { oew: 220100, mtow: 447700, vBase: 140, vSpread: 45, todBase: 2000, todSpread: 1400, ldrBase: 1550, ldrSpread: 1150, flaps: "boeing_heavy", burn: 10000 },
             // McDonnell Douglas
-            "DC10": { oew: 108940, mtow: 259450, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1200, ldrBase: 1300, ldrSpread: 900, flaps: "boeing", burn: 7200 },
-            "MD11": { oew: 128800, mtow: 285990, vBase: 140, vSpread: 45, todBase: 1800, todSpread: 1300, ldrBase: 1400, ldrSpread: 1000, flaps: "boeing", burn: 7500 },
+            "DC10": { oew: 108940, mtow: 259450, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1200, ldrBase: 1300, ldrSpread: 900, flaps: "md", burn: 7200 },
+            "MD11": { oew: 128800, mtow: 285990, vBase: 140, vSpread: 45, todBase: 1800, todSpread: 1300, ldrBase: 1400, ldrSpread: 1000, flaps: "md", burn: 7500 },
             // Regional / Corporate / GA
             "CRJ2": { oew: 13835, mtow: 24041, vBase: 115, vSpread: 25, todBase: 900, todSpread: 600, ldrBase: 800, ldrSpread: 500, flaps: "crj", burn: 900 },
             "CRJ7": { oew: 19731, mtow: 34019, vBase: 118, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "crj", burn: 1100 },
             "CRJ9": { oew: 21433, mtow: 38330, vBase: 122, vSpread: 25, todBase: 1100, todSpread: 800, ldrBase: 1000, ldrSpread: 600, flaps: "crj", burn: 1300 },
             "CRJX": { oew: 23179, mtow: 41640, vBase: 125, vSpread: 25, todBase: 1200, todSpread: 800, ldrBase: 1100, ldrSpread: 600, flaps: "crj", burn: 1400 },
-            "DH8D": { oew: 17185, mtow: 29257, vBase: 105, vSpread: 25, todBase: 800, todSpread: 600, ldrBase: 700, ldrSpread: 400, flaps: "ga", burn: 950 },
+            "DH8D": { oew: 17185, mtow: 29257, vBase: 105, vSpread: 25, todBase: 800, todSpread: 600, ldrBase: 700, ldrSpread: 400, flaps: "q400", burn: 950 },
             "E170": { oew: 21140, mtow: 38600, vBase: 112, vSpread: 25, todBase: 900, todSpread: 650, ldrBase: 850, ldrSpread: 450, flaps: "ejet", burn: 1350 },
             "E175": { oew: 21890, mtow: 38790, vBase: 115, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "ejet", burn: 1450 },
             "E190": { oew: 28080, mtow: 51800, vBase: 120, vSpread: 25, todBase: 1100, todSpread: 800, ldrBase: 1000, ldrSpread: 600, flaps: "ejet", burn: 1800 },
             "E195": { oew: 28620, mtow: 52290, vBase: 122, vSpread: 25, todBase: 1150, todSpread: 850, ldrBase: 1050, ldrSpread: 650, flaps: "ejet", burn: 1950 },
-            "CL35": { oew: 11250, mtow: 18416, vBase: 110, vSpread: 30, todBase: 800, todSpread: 600, ldrBase: 750, ldrSpread: 450, flaps: "crj", burn: 850 },
-            "C172": { oew: 767, mtow: 1157, vBase: 45, vSpread: 15, todBase: 250, todSpread: 250, ldrBase: 200, ldrSpread: 250, flaps: "ga", burn: 30 },
-            "C208": { oew: 2145, mtow: 3969, vBase: 65, vSpread: 20, todBase: 400, todSpread: 300, ldrBase: 350, ldrSpread: 250, flaps: "ga", burn: 180 },
-            "TBM9": { oew: 2132, mtow: 3354, vBase: 75, vSpread: 20, todBase: 500, todSpread: 350, ldrBase: 500, ldrSpread: 300, flaps: "ga", burn: 220 }
+            "CL35": { oew: 11250, mtow: 18416, vBase: 110, vSpread: 30, todBase: 800, todSpread: 600, ldrBase: 750, ldrSpread: 450, flaps: "cl35", burn: 850 },
+            "C172": { oew: 767, mtow: 1157, vBase: 45, vSpread: 15, todBase: 250, todSpread: 250, ldrBase: 200, ldrSpread: 250, flaps: "c172", burn: 30 },
+            "C208": { oew: 2145, mtow: 3969, vBase: 65, vSpread: 20, todBase: 400, todSpread: 300, ldrBase: 350, ldrSpread: 250, flaps: "c208", burn: 180 },
+            "TBM9": { oew: 2132, mtow: 3354, vBase: 75, vSpread: 20, todBase: 500, todSpread: 350, ldrBase: 500, ldrSpread: 300, flaps: "tbm", burn: 220 }
         };
 
-        // --- 2. FLAP FAMILIES ---
+        // --- 2. ACCURATE FLAP FAMILIES ---
         const flapDB = {
-            "airbus": { tk: [ {name: "CONF 1+F", distMult: 1.05, spdMod: 3}, {name: "CONF 2", distMult: 1.0, spdMod: 0}, {name: "CONF 3", distMult: 0.95, spdMod: -3} ], ld: [ {name: "CONF 3", distMult: 1.1, spdMod: 5}, {name: "CONF FULL", distMult: 1.0, spdMod: 0} ] },
-            "boeing": { tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 5}, {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 25", distMult: 0.9, spdMod: -5} ], ld: [ {name: "Flaps 25", distMult: 1.15, spdMod: 8}, {name: "Flaps 30", distMult: 1.05, spdMod: 3}, {name: "Flaps 40", distMult: 1.0, spdMod: 0} ] },
-            "crj": { tk: [ {name: "Flaps 8", distMult: 1.05, spdMod: 3}, {name: "Flaps 20", distMult: 1.0, spdMod: 0} ], ld: [ {name: "Flaps 30", distMult: 1.1, spdMod: 5}, {name: "Flaps 45", distMult: 1.0, spdMod: 0} ] },
-            "ejet": { tk: [ {name: "Flaps 1", distMult: 1.05, spdMod: 4}, {name: "Flaps 2", distMult: 1.0, spdMod: 0} ], ld: [ {name: "Flaps 5", distMult: 1.05, spdMod: 4}, {name: "Flaps FULL", distMult: 1.0, spdMod: 0} ] },
-            "ga": { tk: [ {name: "Flaps 0", distMult: 1.0, spdMod: 0}, {name: "Flaps 10", distMult: 0.9, spdMod: -3} ], ld: [ {name: "Flaps 20", distMult: 1.1, spdMod: 5}, {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] }
-        };
-
-        // --- 3. AIRPORT RUNWAY DATABASE ---
-        const airportDB = {
-            "EGLL": [ {id: "09L/27R", len: 3902, hdg: [90, 270]}, {id: "09R/27L", len: 3658, hdg: [90, 270]} ],
-            "KJFK": [ {id: "13R/31L", len: 4423, hdg: [130, 310]}, {id: "04L/22R", len: 3460, hdg: [40, 220]}, {id: "13L/31R", len: 3048, hdg: [130, 310]} ],
-            "KLAX": [ {id: "07L/25R", len: 3685, hdg: [70, 250]}, {id: "07R/25L", len: 3382, hdg: [70, 250]}, {id: "06R/24L", len: 3135, hdg: [60, 240]} ],
-            "YSSY": [ {id: "16R/34L", len: 3962, hdg: [160, 340]}, {id: "16L/34R", len: 2438, hdg: [160, 340]}, {id: "07/25", len: 2530, hdg: [70, 250]} ],
-            "OMDB": [ {id: "12L/30R", len: 4000, hdg: [120, 300]}, {id: "12R/30L", len: 4000, hdg: [120, 300]} ],
-            "EHAM": [ {id: "18R/36L", len: 3800, hdg: [180, 360]}, {id: "06/24", len: 3500, hdg: [60, 240]}, {id: "18C/36C", len: 3300, hdg: [180, 360]} ],
-            "EDDF": [ {id: "07C/25C", len: 4000, hdg: [70, 250]}, {id: "07R/25L", len: 4000, hdg: [70, 250]}, {id: "18", len: 4000, hdg: [180, 180]} ]
+            "airbus": { 
+                tk: [ {name: "CONF 1+F", distMult: 1.05, spdMod: 3}, {name: "CONF 2", distMult: 1.0, spdMod: 0}, {name: "CONF 3", distMult: 0.95, spdMod: -3} ], 
+                ld: [ {name: "CONF 3", distMult: 1.1, spdMod: 5}, {name: "CONF FULL", distMult: 1.0, spdMod: 0} ] 
+            },
+            "boeing_737": { 
+                tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 5}, {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 25", distMult: 0.9, spdMod: -5} ], 
+                ld: [ {name: "Flaps 30", distMult: 1.05, spdMod: 3}, {name: "Flaps 40", distMult: 1.0, spdMod: 0} ] 
+            },
+            "boeing_heavy": { 
+                tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 5}, {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 20", distMult: 0.95, spdMod: -3} ], 
+                ld: [ {name: "Flaps 25", distMult: 1.1, spdMod: 5}, {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] 
+            },
+            "md": { 
+                tk: [ {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 25", distMult: 0.95, spdMod: -3} ], 
+                ld: [ {name: "Flaps 35", distMult: 1.1, spdMod: 5}, {name: "Flaps 50", distMult: 1.0, spdMod: 0} ] 
+            },
+            "crj": { 
+                tk: [ {name: "Flaps 8", distMult: 1.05, spdMod: 3}, {name: "Flaps 20", distMult: 1.0, spdMod: 0} ], 
+                ld: [ {name: "Flaps 30", distMult: 1.1, spdMod: 5}, {name: "Flaps 45", distMult: 1.0, spdMod: 0} ] 
+            },
+            "q400": { 
+                tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 4}, {name: "Flaps 10", distMult: 1.0, spdMod: 0}, {name: "Flaps 15", distMult: 0.95, spdMod: -3} ], 
+                ld: [ {name: "Flaps 15", distMult: 1.1, spdMod: 5}, {name: "Flaps 35", distMult: 1.0, spdMod: 0} ] 
+            },
+            "ejet": { 
+                tk: [ {name: "Flaps 1", distMult: 1.05, spdMod: 4}, {name: "Flaps 2", distMult: 1.0, spdMod: 0}, {name: "Flaps 4", distMult: 0.95, spdMod: -3} ], 
+                ld: [ {name: "Flaps 5", distMult: 1.05, spdMod: 4}, {name: "Flaps FULL", distMult: 1.0, spdMod: 0} ] 
+            },
+            "cl35": { 
+                tk: [ {name: "Flaps 10", distMult: 1.05, spdMod: 3}, {name: "Flaps 20", distMult: 1.0, spdMod: 0} ], 
+                ld: [ {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] 
+            },
+            "tbm": { 
+                tk: [ {name: "UP (0%)", distMult: 1.15, spdMod: 5}, {name: "TO (50%)", distMult: 1.0, spdMod: 0} ], 
+                ld: [ {name: "TO (50%)", distMult: 1.15, spdMod: 5}, {name: "LDG (100%)", distMult: 1.0, spdMod: 0} ] 
+            },
+            "c172": { 
+                tk: [ {name: "Flaps 0", distMult: 1.0, spdMod: 0}, {name: "Flaps 10", distMult: 0.9, spdMod: -3} ], 
+                ld: [ {name: "Flaps 20", distMult: 1.1, spdMod: 5}, {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] 
+            },
+            "c208": { 
+                tk: [ {name: "UP", distMult: 1.05, spdMod: 2}, {name: "TO/APR", distMult: 1.0, spdMod: 0} ], 
+                ld: [ {name: "TO/APR", distMult: 1.1, spdMod: 5}, {name: "LAND", distMult: 1.0, spdMod: 0} ] 
+            }
         };
 
         // --- Core Functions ---
@@ -126,34 +154,75 @@
             });
         }
 
-        function autoFetchRunways(type) {
+        // --- GLOBAL RUNWAY FETCHER (OurAirports) ---
+        let globalRunwaysCSV = null;
+
+        async function autoFetchRunways(type) {
             let icao = document.getElementById(type + '-icao').value.toUpperCase();
             let selectBox = document.getElementById(type + '-rwy-select');
             
-            selectBox.innerHTML = '';
-            if (airportDB[icao]) {
-                airportDB[icao].forEach(rwy => {
-                    let opt1 = document.createElement("option");
-                    opt1.value = `${rwy.len}|${rwy.hdg[0]}`; opt1.text = `${rwy.id.split('/')[0]} (${rwy.len}m)`;
-                    selectBox.appendChild(opt1);
-                    if (rwy.id.includes('/')) {
-                        let opt2 = document.createElement("option");
-                        opt2.value = `${rwy.len}|${rwy.hdg[1]}`; opt2.text = `${rwy.id.split('/')[1]} (${rwy.len}m)`;
-                        selectBox.appendChild(opt2);
+            if (icao.length !== 4) return;
+            
+            selectBox.innerHTML = '<option>SEARCHING GLOBAL DB...</option>';
+
+            try {
+                if (!globalRunwaysCSV) {
+                    let response = await fetch("https://davidmegginson.github.io/ourairports-data/runways.csv");
+                    globalRunwaysCSV = await response.text();
+                }
+
+                let lines = globalRunwaysCSV.split('\n');
+                let foundRunways = [];
+                
+                for (let i = 1; i < lines.length; i++) {
+                    let cols = lines[i].split(',');
+                    
+                    if (cols.length > 18 && cols[2].replace(/"/g, '') === icao) {
+                        let lengthFt = parseFloat(cols[3].replace(/"/g, ''));
+                        if (isNaN(lengthFt)) continue;
+                        
+                        let lengthM = Math.floor(lengthFt * 0.3048);
+                        
+                        let leIdent = cols[8].replace(/"/g, '');
+                        let leHdg = parseFloat(cols[12].replace(/"/g, '')) || parseInt(leIdent.replace(/\D/g, '')) * 10;
+                        
+                        let heIdent = cols[14].replace(/"/g, '');
+                        let heHdg = parseFloat(cols[18].replace(/"/g, '')) || parseInt(heIdent.replace(/\D/g, '')) * 10;
+                        
+                        if(leIdent) foundRunways.push({ id: leIdent, len: lengthM, hdg: leHdg });
+                        if(heIdent) foundRunways.push({ id: heIdent, len: lengthM, hdg: heHdg });
                     }
-                });
-                document.getElementById(type + '-rwy-manual').classList.add('hidden');
-                document.getElementById(type + '-hdg-manual').classList.add('hidden');
-            } else {
-                let manualOpt = document.createElement("option");
-                manualOpt.value = "manual"; manualOpt.text = "MANUAL ENTRY";
-                selectBox.appendChild(manualOpt);
+                }
+
+                selectBox.innerHTML = '';
+                
+                if (foundRunways.length > 0) {
+                    foundRunways.sort((a, b) => a.id.localeCompare(b.id));
+                    
+                    foundRunways.forEach(rwy => {
+                        let opt = document.createElement("option");
+                        opt.value = `${rwy.len}|${rwy.hdg}`; 
+                        opt.text = `${rwy.id} (${rwy.len}m)`;
+                        selectBox.appendChild(opt);
+                    });
+                    document.getElementById(type + '-rwy-manual').classList.add('hidden');
+                    document.getElementById(type + '-hdg-manual').classList.add('hidden');
+                } else {
+                    let manualOpt = document.createElement("option");
+                    manualOpt.value = "manual"; manualOpt.text = "NOT IN DB - MANUAL ENTRY";
+                    selectBox.appendChild(manualOpt);
+                    document.getElementById(type + '-rwy-manual').classList.remove('hidden');
+                    document.getElementById(type + '-hdg-manual').classList.remove('hidden');
+                }
+            } catch (e) {
+                console.error("Runway fetch failed", e);
+                selectBox.innerHTML = '<option value="manual">API ERR - MANUAL ENTRY</option>';
                 document.getElementById(type + '-rwy-manual').classList.remove('hidden');
                 document.getElementById(type + '-hdg-manual').classList.remove('hidden');
             }
         }
 
-      // --- NEW: VATSIM Live Auto-METAR Fetcher ---
+        // --- VATSIM Live Auto-METAR Fetcher ---
         async function fetchMETAR(type) {
             let icao = document.getElementById(type + '-icao').value.toUpperCase();
             let btn = document.getElementById(type + '-metar-btn');
@@ -161,34 +230,27 @@
             if (icao.length === 4) {
                 btn.innerText = "FETCHING...";
                 try {
-                    // Bypassing strict government CORS by using VATSIM's flight sim network
                     let response = await fetch(`https://metar.vatsim.net/metar.php?id=${icao}`);
-                    
                     if (!response.ok) throw new Error("Network offline");
-                    
                     let metarText = await response.text();
                     
-                    // If the text contains the airport code, it's a valid METAR
                     if (metarText && metarText.includes(icao)) {
                         let windDir = 0;
                         let windSpd = 0;
                         let temp = 15;
 
-                        // 1. Extract Wind (e.g., 27008KT, VRB05KT, or 12015G25KT)
                         let windMatch = metarText.match(/(VRB|\d{3})(\d{2,3})(?:G\d{2,3})?KT/);
                         if (windMatch) {
                             windDir = windMatch[1] === 'VRB' ? 0 : parseInt(windMatch[1]);
                             windSpd = parseInt(windMatch[2]);
                         }
 
-                        // 2. Extract Temperature (e.g., 16/11 or M02/M05 for negatives)
                         let tempMatch = metarText.match(/(M?\d{2})\/(M?\d{2})/);
                         if (tempMatch) {
                             let tStr = tempMatch[1];
                             temp = tStr.startsWith('M') ? -parseInt(tStr.substring(1)) : parseInt(tStr);
                         }
                         
-                        // Push to the dashboard
                         document.getElementById(type === 'dep' ? 'tk-wind-dir' : 'ld-wind-dir').value = windDir;
                         document.getElementById(type === 'dep' ? 'tk-wind-spd' : 'ld-wind-spd').value = windSpd;
                         document.getElementById(type === 'dep' ? 'tk-temp' : 'ld-temp').value = temp;
@@ -209,6 +271,7 @@
                 alert("Please enter a valid 4-letter ICAO code first.");
             }
         }
+
         function toggleCheck(el) {
             el.classList.toggle('border-emerald-500');
             el.classList.toggle('text-emerald-400');
