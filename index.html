@@ -16,7 +16,7 @@
         ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
     <script>
-        // --- 1. AIRCRAFT DATABASE (Complete IF Fleet) ---
+        // --- 1. AIRCRAFT DATABASE ---
         const aircraftDB = {
             // Airbus
             "A223": { oew: 37080, mtow: 67585, vBase: 115, vSpread: 30, todBase: 900, todSpread: 800, ldrBase: 900, ldrSpread: 600, flaps: "airbus", burn: 1800 },
@@ -153,7 +153,7 @@
             }
         }
 
-       // --- NEW: Live Auto-METAR Fetcher ---
+        // --- NEW: Live Auto-METAR Fetcher ---
         async function fetchMETAR(type) {
             let icao = document.getElementById(type + '-icao').value.toUpperCase();
             let btn = document.getElementById(type + '-metar-btn');
@@ -164,7 +164,6 @@
                     // Pulling real-world live METAR from AviationWeather API
                     let response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}&format=json`);
                     
-                    // The server returns 204 if the airport is valid but has no weather data
                     if (response.status === 204) {
                         btn.innerText = "NO WEATHER";
                         setTimeout(() => { btn.innerText = "GET METAR"; }, 3000);
@@ -176,14 +175,14 @@
                     if (data && data.length > 0) {
                         let metar = data[0];
                         
-                        // Handle variable or missing wind data safely
                         let windDir = (metar.wdir === 'VRB' || metar.wdir === null) ? 0 : metar.wdir;
                         let windSpd = metar.wspd || 0;
                         let temp = metar.temp || 15;
                         
+                        // Properly fill all three boxes dynamically for both tk- and ld- inputs
                         document.getElementById(type === 'dep' ? 'tk-wind-dir' : 'ld-wind-dir').value = windDir;
                         document.getElementById(type === 'dep' ? 'tk-wind-spd' : 'ld-wind-spd').value = windSpd;
-                        if(type === 'dep') document.getElementById('tk-temp').value = temp;
+                        document.getElementById(type === 'dep' ? 'tk-temp' : 'ld-temp').value = temp;
                         
                         btn.innerText = "METAR OK";
                         btn.classList.replace("bg-slate-700", "bg-emerald-600");
@@ -201,7 +200,7 @@
                 alert("Please enter a valid 4-letter ICAO code first.");
             }
         }
-        // --- NEW: Interactive Checklists Toggle ---
+
         function toggleCheck(el) {
             el.classList.toggle('border-emerald-500');
             el.classList.toggle('text-emerald-400');
@@ -502,10 +501,11 @@
                         <span class="efb-label text-sky-300">Surface Weather</span>
                         <button id="arr-metar-btn" onclick="fetchMETAR('arr')" class="bg-slate-700 hover:bg-slate-600 text-[0.6rem] px-2 py-1 rounded text-white font-bold transition uppercase tracking-wider border border-slate-600">GET METAR</button>
                     </div>
-                    <div class="flex gap-2">
+                    <div class="flex gap-2 mb-2">
                         <input id="ld-wind-dir" type="number" placeholder="WIND DIR" class="efb-input w-1/2 p-2 rounded">
                         <input id="ld-wind-spd" type="number" placeholder="KT" class="efb-input w-1/2 p-2 rounded">
                     </div>
+                    <input id="ld-temp" type="number" value="15" placeholder="OAT °C" class="efb-input w-full p-2 rounded">
                 </div>
                 <div class="col-span-4 p-3 bg-slate-800 rounded border border-slate-700">
                     <span class="efb-label block mb-2 text-sky-300">Configuration</span>
@@ -640,7 +640,6 @@
 
         <!-- CHECKLIST SECTION -->
         <div id="chk-section" class="p-5 flex-1 overflow-y-auto hidden">
-            
             <h2 class="text-sky-400 font-bold text-sm mb-3 uppercase tracking-widest border-b border-slate-700 pb-2">1. Pre-Flight / Startup</h2>
             <ul class="mb-6 space-y-2 font-mono text-xs md:text-sm">
                 <li class="p-3 bg-slate-800 rounded border border-slate-700 cursor-pointer transition flex justify-between items-center select-none" onclick="toggleCheck(this)">
