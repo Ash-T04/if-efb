@@ -19,115 +19,86 @@
         // --- 1. AIRCRAFT DATABASE (Complete IF Fleet) ---
         const aircraftDB = {
             // Airbus
-            "A223": { oew: 37080, mtow: 67585, vBase: 115, vSpread: 30, todBase: 900, todSpread: 800, ldrBase: 900, ldrSpread: 600, flaps: "airbus", burn: 1800 },
-            "A318": { oew: 39500, mtow: 68000, vBase: 115, vSpread: 30, todBase: 900, todSpread: 800, ldrBase: 800, ldrSpread: 600, flaps: "airbus", burn: 2200 },
-            "A319": { oew: 40800, mtow: 75500, vBase: 118, vSpread: 30, todBase: 1000, todSpread: 900, ldrBase: 900, ldrSpread: 600, flaps: "airbus", burn: 2300 },
-            "A320": { oew: 42600, mtow: 78000, vBase: 120, vSpread: 32, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "airbus", burn: 2500 },
-            "A321": { oew: 48500, mtow: 93500, vBase: 125, vSpread: 35, todBase: 1400, todSpread: 1100, ldrBase: 1100, ldrSpread: 800, flaps: "airbus", burn: 2900 },
-            "A332F":{ oew: 109000, mtow: 233000, vBase: 128, vSpread: 40, todBase: 1500, todSpread: 1100, ldrBase: 1150, ldrSpread: 850, flaps: "airbus", burn: 5200 },
-            "A333": { oew: 129400, mtow: 242000, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1200, ldrBase: 1200, ldrSpread: 900, flaps: "airbus", burn: 5500 },
-            "A339": { oew: 137000, mtow: 251000, vBase: 132, vSpread: 40, todBase: 1600, todSpread: 1200, ldrBase: 1200, ldrSpread: 900, flaps: "airbus", burn: 5000 },
-            "A346": { oew: 177800, mtow: 368000, vBase: 138, vSpread: 45, todBase: 1800, todSpread: 1400, ldrBase: 1350, ldrSpread: 1000, flaps: "airbus", burn: 7800 },
-            "A359": { oew: 142400, mtow: 280000, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1300, ldrBase: 1300, ldrSpread: 1000, flaps: "airbus", burn: 5800 },
-            "A388": { oew: 276800, mtow: 575000, vBase: 140, vSpread: 45, todBase: 2000, todSpread: 1400, ldrBase: 1500, ldrSpread: 1200, flaps: "airbus", burn: 11500 },
+            "A223": { oew: 37080, mtow: 67585, vBase: 115, vSpread: 30, todBase: 900, todSpread: 800, ldrBase: 900, ldrSpread: 600, flaps: "airbus", burn: 1800, tas: 450 },
+            "A318": { oew: 39500, mtow: 68000, vBase: 115, vSpread: 30, todBase: 900, todSpread: 800, ldrBase: 800, ldrSpread: 600, flaps: "airbus", burn: 2200, tas: 450 },
+            "A319": { oew: 40800, mtow: 75500, vBase: 118, vSpread: 30, todBase: 1000, todSpread: 900, ldrBase: 900, ldrSpread: 600, flaps: "airbus", burn: 2300, tas: 450 },
+            "A320": { oew: 42600, mtow: 78000, vBase: 120, vSpread: 32, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "airbus", burn: 2500, tas: 450 },
+            "A321": { oew: 48500, mtow: 93500, vBase: 125, vSpread: 35, todBase: 1400, todSpread: 1100, ldrBase: 1100, ldrSpread: 800, flaps: "airbus", burn: 2900, tas: 450 },
+            "A332F":{ oew: 109000, mtow: 233000, vBase: 128, vSpread: 40, todBase: 1500, todSpread: 1100, ldrBase: 1150, ldrSpread: 850, flaps: "airbus", burn: 5200, tas: 470 },
+            "A333": { oew: 129400, mtow: 242000, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1200, ldrBase: 1200, ldrSpread: 900, flaps: "airbus", burn: 5500, tas: 470 },
+            "A339": { oew: 137000, mtow: 251000, vBase: 132, vSpread: 40, todBase: 1600, todSpread: 1200, ldrBase: 1200, ldrSpread: 900, flaps: "airbus", burn: 5000, tas: 470 },
+            "A346": { oew: 177800, mtow: 368000, vBase: 138, vSpread: 45, todBase: 1800, todSpread: 1400, ldrBase: 1350, ldrSpread: 1000, flaps: "airbus", burn: 7800, tas: 480 },
+            "A359": { oew: 142400, mtow: 280000, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1300, ldrBase: 1300, ldrSpread: 1000, flaps: "airbus", burn: 5800, tas: 485 },
+            "A388": { oew: 276800, mtow: 575000, vBase: 140, vSpread: 45, todBase: 2000, todSpread: 1400, ldrBase: 1500, ldrSpread: 1200, flaps: "airbus", burn: 11500, tas: 490 },
             // Boeing
-            "B712": { oew: 30440, mtow: 54930, vBase: 115, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "boeing_737", burn: 2000 },
-            "B737": { oew: 37784, mtow: 70080, vBase: 115, vSpread: 30, todBase: 1000, todSpread: 900, ldrBase: 900, ldrSpread: 600, flaps: "boeing_737", burn: 2200 },
-            "B738": { oew: 41413, mtow: 79015, vBase: 120, vSpread: 35, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "boeing_737", burn: 2500 },
-            "B38M": { oew: 45070, mtow: 82190, vBase: 120, vSpread: 35, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "boeing_737", burn: 2150 },
-            "B739": { oew: 44676, mtow: 85139, vBase: 125, vSpread: 35, todBase: 1300, todSpread: 1100, ldrBase: 1100, ldrSpread: 750, flaps: "boeing_737", burn: 2600 },
-            "B752": { oew: 58440, mtow: 115680, vBase: 120, vSpread: 35, todBase: 1300, todSpread: 900, ldrBase: 1100, ldrSpread: 700, flaps: "boeing_heavy", burn: 3200 },
-            "B763": { oew: 86070, mtow: 186880, vBase: 125, vSpread: 35, todBase: 1500, todSpread: 1000, ldrBase: 1200, ldrSpread: 800, flaps: "boeing_heavy", burn: 4800 },
-            "B772": { oew: 135800, mtow: 297550, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1200, ldrBase: 1300, ldrSpread: 900, flaps: "boeing_heavy", burn: 6500 },
-            "B77F": { oew: 144400, mtow: 347800, vBase: 135, vSpread: 45, todBase: 1700, todSpread: 1300, ldrBase: 1350, ldrSpread: 950, flaps: "boeing_heavy", burn: 7000 },
-            "B77W": { oew: 167829, mtow: 351533, vBase: 135, vSpread: 45, todBase: 1800, todSpread: 1400, ldrBase: 1400, ldrSpread: 1000, flaps: "boeing_heavy", burn: 7500 },
-            "B788": { oew: 119950, mtow: 227930, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1100, ldrBase: 1300, ldrSpread: 800, flaps: "boeing_heavy", burn: 4800 },
-            "B789": { oew: 128850, mtow: 254011, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1200, ldrBase: 1350, ldrSpread: 850, flaps: "boeing_heavy", burn: 5200 },
-            "B78X": { oew: 135500, mtow: 254011, vBase: 140, vSpread: 40, todBase: 1800, todSpread: 1300, ldrBase: 1400, ldrSpread: 900, flaps: "boeing_heavy", burn: 5600 },
-            "B744": { oew: 183500, mtow: 396890, vBase: 135, vSpread: 45, todBase: 1900, todSpread: 1300, ldrBase: 1500, ldrSpread: 1100, flaps: "boeing_heavy", burn: 10500 },
-            "B748": { oew: 220100, mtow: 447700, vBase: 140, vSpread: 45, todBase: 2000, todSpread: 1400, ldrBase: 1550, ldrSpread: 1150, flaps: "boeing_heavy", burn: 10000 },
+            "B712": { oew: 30440, mtow: 54930, vBase: 115, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "boeing_737", burn: 2000, tas: 430 },
+            "B737": { oew: 37784, mtow: 70080, vBase: 115, vSpread: 30, todBase: 1000, todSpread: 900, ldrBase: 900, ldrSpread: 600, flaps: "boeing_737", burn: 2200, tas: 450 },
+            "B738": { oew: 41413, mtow: 79015, vBase: 120, vSpread: 35, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "boeing_737", burn: 2500, tas: 450 },
+            "B38M": { oew: 45070, mtow: 82190, vBase: 120, vSpread: 35, todBase: 1200, todSpread: 1000, ldrBase: 1000, ldrSpread: 700, flaps: "boeing_737", burn: 2150, tas: 450 },
+            "B739": { oew: 44676, mtow: 85139, vBase: 125, vSpread: 35, todBase: 1300, todSpread: 1100, ldrBase: 1100, ldrSpread: 750, flaps: "boeing_737", burn: 2600, tas: 450 },
+            "B752": { oew: 58440, mtow: 115680, vBase: 120, vSpread: 35, todBase: 1300, todSpread: 900, ldrBase: 1100, ldrSpread: 700, flaps: "boeing_heavy", burn: 3200, tas: 460 },
+            "B763": { oew: 86070, mtow: 186880, vBase: 125, vSpread: 35, todBase: 1500, todSpread: 1000, ldrBase: 1200, ldrSpread: 800, flaps: "boeing_heavy", burn: 4800, tas: 460 },
+            "B772": { oew: 135800, mtow: 297550, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1200, ldrBase: 1300, ldrSpread: 900, flaps: "boeing_heavy", burn: 6500, tas: 480 },
+            "B77F": { oew: 144400, mtow: 347800, vBase: 135, vSpread: 45, todBase: 1700, todSpread: 1300, ldrBase: 1350, ldrSpread: 950, flaps: "boeing_heavy", burn: 7000, tas: 480 },
+            "B77W": { oew: 167829, mtow: 351533, vBase: 135, vSpread: 45, todBase: 1800, todSpread: 1400, ldrBase: 1400, ldrSpread: 1000, flaps: "boeing_heavy", burn: 7500, tas: 480 },
+            "B788": { oew: 119950, mtow: 227930, vBase: 130, vSpread: 40, todBase: 1600, todSpread: 1100, ldrBase: 1300, ldrSpread: 800, flaps: "boeing_heavy", burn: 4800, tas: 485 },
+            "B789": { oew: 128850, mtow: 254011, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1200, ldrBase: 1350, ldrSpread: 850, flaps: "boeing_heavy", burn: 5200, tas: 485 },
+            "B78X": { oew: 135500, mtow: 254011, vBase: 140, vSpread: 40, todBase: 1800, todSpread: 1300, ldrBase: 1400, ldrSpread: 900, flaps: "boeing_heavy", burn: 5600, tas: 485 },
+            "B744": { oew: 183500, mtow: 396890, vBase: 135, vSpread: 45, todBase: 1900, todSpread: 1300, ldrBase: 1500, ldrSpread: 1100, flaps: "boeing_heavy", burn: 10500, tas: 490 },
+            "B748": { oew: 220100, mtow: 447700, vBase: 140, vSpread: 45, todBase: 2000, todSpread: 1400, ldrBase: 1550, ldrSpread: 1150, flaps: "boeing_heavy", burn: 10000, tas: 490 },
             // McDonnell Douglas
-            "DC10": { oew: 108940, mtow: 259450, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1200, ldrBase: 1300, ldrSpread: 900, flaps: "md", burn: 7200 },
-            "MD11": { oew: 128800, mtow: 285990, vBase: 140, vSpread: 45, todBase: 1800, todSpread: 1300, ldrBase: 1400, ldrSpread: 1000, flaps: "md", burn: 7500 },
-            // Regional / Corporate / GA
-            "CRJ2": { oew: 13835, mtow: 24041, vBase: 115, vSpread: 25, todBase: 900, todSpread: 600, ldrBase: 800, ldrSpread: 500, flaps: "crj", burn: 900 },
-            "CRJ7": { oew: 19731, mtow: 34019, vBase: 118, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "crj", burn: 1100 },
-            "CRJ9": { oew: 21433, mtow: 38330, vBase: 122, vSpread: 25, todBase: 1100, todSpread: 800, ldrBase: 1000, ldrSpread: 600, flaps: "crj", burn: 1300 },
-            "CRJX": { oew: 23179, mtow: 41640, vBase: 125, vSpread: 25, todBase: 1200, todSpread: 800, ldrBase: 1100, ldrSpread: 600, flaps: "crj", burn: 1400 },
-            "DH8D": { oew: 17185, mtow: 29257, vBase: 105, vSpread: 25, todBase: 800, todSpread: 600, ldrBase: 700, ldrSpread: 400, flaps: "q400", burn: 950 },
-            "E170": { oew: 21140, mtow: 38600, vBase: 112, vSpread: 25, todBase: 900, todSpread: 650, ldrBase: 850, ldrSpread: 450, flaps: "ejet", burn: 1350 },
-            "E175": { oew: 21890, mtow: 38790, vBase: 115, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "ejet", burn: 1450 },
-            "E190": { oew: 28080, mtow: 51800, vBase: 120, vSpread: 25, todBase: 1100, todSpread: 800, ldrBase: 1000, ldrSpread: 600, flaps: "ejet", burn: 1800 },
-            "E195": { oew: 28620, mtow: 52290, vBase: 122, vSpread: 25, todBase: 1150, todSpread: 850, ldrBase: 1050, ldrSpread: 650, flaps: "ejet", burn: 1950 },
-            "CL35": { oew: 11250, mtow: 18416, vBase: 110, vSpread: 30, todBase: 800, todSpread: 600, ldrBase: 750, ldrSpread: 450, flaps: "cl35", burn: 850 },
-            "C172": { oew: 767, mtow: 1157, vBase: 45, vSpread: 15, todBase: 250, todSpread: 250, ldrBase: 200, ldrSpread: 250, flaps: "c172", burn: 30 },
-            "C208": { oew: 2145, mtow: 3969, vBase: 65, vSpread: 20, todBase: 400, todSpread: 300, ldrBase: 350, ldrSpread: 250, flaps: "c208", burn: 180 },
-            "TBM9": { oew: 2132, mtow: 3354, vBase: 75, vSpread: 20, todBase: 500, todSpread: 350, ldrBase: 500, ldrSpread: 300, flaps: "tbm", burn: 220 }
+            "DC10": { oew: 108940, mtow: 259450, vBase: 135, vSpread: 40, todBase: 1700, todSpread: 1200, ldrBase: 1300, ldrSpread: 900, flaps: "md", burn: 7200, tas: 480 },
+            "MD11": { oew: 128800, mtow: 285990, vBase: 140, vSpread: 45, todBase: 1800, todSpread: 1300, ldrBase: 1400, ldrSpread: 1000, flaps: "md", burn: 7500, tas: 480 },
+            // Regional / GA
+            "CRJ2": { oew: 13835, mtow: 24041, vBase: 115, vSpread: 25, todBase: 900, todSpread: 600, ldrBase: 800, ldrSpread: 500, flaps: "crj", burn: 900, tas: 420 },
+            "CRJ7": { oew: 19731, mtow: 34019, vBase: 118, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "crj", burn: 1100, tas: 440 },
+            "CRJ9": { oew: 21433, mtow: 38330, vBase: 122, vSpread: 25, todBase: 1100, todSpread: 800, ldrBase: 1000, ldrSpread: 600, flaps: "crj", burn: 1300, tas: 440 },
+            "CRJX": { oew: 23179, mtow: 41640, vBase: 125, vSpread: 25, todBase: 1200, todSpread: 800, ldrBase: 1100, ldrSpread: 600, flaps: "crj", burn: 1400, tas: 440 },
+            "DH8D": { oew: 17185, mtow: 29257, vBase: 105, vSpread: 25, todBase: 800, todSpread: 600, ldrBase: 700, ldrSpread: 400, flaps: "q400", burn: 950, tas: 360 },
+            "E170": { oew: 21140, mtow: 38600, vBase: 112, vSpread: 25, todBase: 900, todSpread: 650, ldrBase: 850, ldrSpread: 450, flaps: "ejet", burn: 1350, tas: 430 },
+            "E175": { oew: 21890, mtow: 38790, vBase: 115, vSpread: 25, todBase: 1000, todSpread: 700, ldrBase: 900, ldrSpread: 500, flaps: "ejet", burn: 1450, tas: 430 },
+            "E190": { oew: 28080, mtow: 51800, vBase: 120, vSpread: 25, todBase: 1100, todSpread: 800, ldrBase: 1000, ldrSpread: 600, flaps: "ejet", burn: 1800, tas: 440 },
+            "E195": { oew: 28620, mtow: 52290, vBase: 122, vSpread: 25, todBase: 1150, todSpread: 850, ldrBase: 1050, ldrSpread: 650, flaps: "ejet", burn: 1950, tas: 440 },
+            "CL35": { oew: 11250, mtow: 18416, vBase: 110, vSpread: 30, todBase: 800, todSpread: 600, ldrBase: 750, ldrSpread: 450, flaps: "cl35", burn: 850, tas: 450 },
+            "C172": { oew: 767, mtow: 1157, vBase: 45, vSpread: 15, todBase: 250, todSpread: 250, ldrBase: 200, ldrSpread: 250, flaps: "c172", burn: 30, tas: 120 },
+            "C208": { oew: 2145, mtow: 3969, vBase: 65, vSpread: 20, todBase: 400, todSpread: 300, ldrBase: 350, ldrSpread: 250, flaps: "c208", burn: 180, tas: 175 },
+            "TBM9": { oew: 2132, mtow: 3354, vBase: 75, vSpread: 20, todBase: 500, todSpread: 350, ldrBase: 500, ldrSpread: 300, flaps: "tbm", burn: 220, tas: 310 }
         };
 
         // --- 2. ACCURATE FLAP FAMILIES ---
         const flapDB = {
-            "airbus": { 
-                tk: [ {name: "CONF 1+F", distMult: 1.05, spdMod: 3}, {name: "CONF 2", distMult: 1.0, spdMod: 0}, {name: "CONF 3", distMult: 0.95, spdMod: -3} ], 
-                ld: [ {name: "CONF 3", distMult: 1.1, spdMod: 5}, {name: "CONF FULL", distMult: 1.0, spdMod: 0} ] 
-            },
-            "boeing_737": { 
-                tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 5}, {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 25", distMult: 0.9, spdMod: -5} ], 
-                ld: [ {name: "Flaps 30", distMult: 1.05, spdMod: 3}, {name: "Flaps 40", distMult: 1.0, spdMod: 0} ] 
-            },
-            "boeing_heavy": { 
-                tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 5}, {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 20", distMult: 0.95, spdMod: -3} ], 
-                ld: [ {name: "Flaps 25", distMult: 1.1, spdMod: 5}, {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] 
-            },
-            "md": { 
-                tk: [ {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 25", distMult: 0.95, spdMod: -3} ], 
-                ld: [ {name: "Flaps 35", distMult: 1.1, spdMod: 5}, {name: "Flaps 50", distMult: 1.0, spdMod: 0} ] 
-            },
-            "crj": { 
-                tk: [ {name: "Flaps 8", distMult: 1.05, spdMod: 3}, {name: "Flaps 20", distMult: 1.0, spdMod: 0} ], 
-                ld: [ {name: "Flaps 30", distMult: 1.1, spdMod: 5}, {name: "Flaps 45", distMult: 1.0, spdMod: 0} ] 
-            },
-            "q400": { 
-                tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 4}, {name: "Flaps 10", distMult: 1.0, spdMod: 0}, {name: "Flaps 15", distMult: 0.95, spdMod: -3} ], 
-                ld: [ {name: "Flaps 15", distMult: 1.1, spdMod: 5}, {name: "Flaps 35", distMult: 1.0, spdMod: 0} ] 
-            },
-            "ejet": { 
-                tk: [ {name: "Flaps 1", distMult: 1.05, spdMod: 4}, {name: "Flaps 2", distMult: 1.0, spdMod: 0}, {name: "Flaps 4", distMult: 0.95, spdMod: -3} ], 
-                ld: [ {name: "Flaps 5", distMult: 1.05, spdMod: 4}, {name: "Flaps FULL", distMult: 1.0, spdMod: 0} ] 
-            },
-            "cl35": { 
-                tk: [ {name: "Flaps 10", distMult: 1.05, spdMod: 3}, {name: "Flaps 20", distMult: 1.0, spdMod: 0} ], 
-                ld: [ {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] 
-            },
-            "tbm": { 
-                tk: [ {name: "UP (0%)", distMult: 1.15, spdMod: 5}, {name: "TO (50%)", distMult: 1.0, spdMod: 0} ], 
-                ld: [ {name: "TO (50%)", distMult: 1.15, spdMod: 5}, {name: "LDG (100%)", distMult: 1.0, spdMod: 0} ] 
-            },
-            "c172": { 
-                tk: [ {name: "Flaps 0", distMult: 1.0, spdMod: 0}, {name: "Flaps 10", distMult: 0.9, spdMod: -3} ], 
-                ld: [ {name: "Flaps 20", distMult: 1.1, spdMod: 5}, {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] 
-            },
-            "c208": { 
-                tk: [ {name: "UP", distMult: 1.05, spdMod: 2}, {name: "TO/APR", distMult: 1.0, spdMod: 0} ], 
-                ld: [ {name: "TO/APR", distMult: 1.1, spdMod: 5}, {name: "LAND", distMult: 1.0, spdMod: 0} ] 
-            }
+            "airbus": { tk: [ {name: "CONF 1+F", distMult: 1.05, spdMod: 3}, {name: "CONF 2", distMult: 1.0, spdMod: 0}, {name: "CONF 3", distMult: 0.95, spdMod: -3} ], ld: [ {name: "CONF 3", distMult: 1.1, spdMod: 5}, {name: "CONF FULL", distMult: 1.0, spdMod: 0} ] },
+            "boeing_737": { tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 5}, {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 25", distMult: 0.9, spdMod: -5} ], ld: [ {name: "Flaps 30", distMult: 1.05, spdMod: 3}, {name: "Flaps 40", distMult: 1.0, spdMod: 0} ] },
+            "boeing_heavy": { tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 5}, {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 20", distMult: 0.95, spdMod: -3} ], ld: [ {name: "Flaps 25", distMult: 1.1, spdMod: 5}, {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] },
+            "md": { tk: [ {name: "Flaps 15", distMult: 1.0, spdMod: 0}, {name: "Flaps 25", distMult: 0.95, spdMod: -3} ], ld: [ {name: "Flaps 35", distMult: 1.1, spdMod: 5}, {name: "Flaps 50", distMult: 1.0, spdMod: 0} ] },
+            "crj": { tk: [ {name: "Flaps 8", distMult: 1.05, spdMod: 3}, {name: "Flaps 20", distMult: 1.0, spdMod: 0} ], ld: [ {name: "Flaps 30", distMult: 1.1, spdMod: 5}, {name: "Flaps 45", distMult: 1.0, spdMod: 0} ] },
+            "q400": { tk: [ {name: "Flaps 5", distMult: 1.05, spdMod: 4}, {name: "Flaps 10", distMult: 1.0, spdMod: 0}, {name: "Flaps 15", distMult: 0.95, spdMod: -3} ], ld: [ {name: "Flaps 15", distMult: 1.1, spdMod: 5}, {name: "Flaps 35", distMult: 1.0, spdMod: 0} ] },
+            "ejet": { tk: [ {name: "Flaps 1", distMult: 1.05, spdMod: 4}, {name: "Flaps 2", distMult: 1.0, spdMod: 0}, {name: "Flaps 4", distMult: 0.95, spdMod: -3} ], ld: [ {name: "Flaps 5", distMult: 1.05, spdMod: 4}, {name: "Flaps FULL", distMult: 1.0, spdMod: 0} ] },
+            "cl35": { tk: [ {name: "Flaps 10", distMult: 1.05, spdMod: 3}, {name: "Flaps 20", distMult: 1.0, spdMod: 0} ], ld: [ {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] },
+            "tbm": { tk: [ {name: "UP (0%)", distMult: 1.15, spdMod: 5}, {name: "TO (50%)", distMult: 1.0, spdMod: 0} ], ld: [ {name: "TO (50%)", distMult: 1.15, spdMod: 5}, {name: "LDG (100%)", distMult: 1.0, spdMod: 0} ] },
+            "c172": { tk: [ {name: "Flaps 0", distMult: 1.0, spdMod: 0}, {name: "Flaps 10", distMult: 0.9, spdMod: -3} ], ld: [ {name: "Flaps 20", distMult: 1.1, spdMod: 5}, {name: "Flaps 30", distMult: 1.0, spdMod: 0} ] },
+            "c208": { tk: [ {name: "UP", distMult: 1.05, spdMod: 2}, {name: "TO/APR", distMult: 1.0, spdMod: 0} ], ld: [ {name: "TO/APR", distMult: 1.1, spdMod: 5}, {name: "LAND", distMult: 1.0, spdMod: 0} ] }
         };
 
         // --- Core Functions ---
         function initApp() {
             updateFlaps();
-            document.getElementById('sys-time').innerText = new Date().toISOString().substring(11, 16) + " Z";
-            setInterval(() => { document.getElementById('sys-time').innerText = new Date().toISOString().substring(11, 16) + " Z"; }, 60000);
+            updateTime();
+            setInterval(updateTime, 1000); // Ticks every 1 second
+        }
+
+        function updateTime() {
+            // Generates time format: HH:MM:SS Z
+            document.getElementById('sys-time').innerText = new Date().toISOString().substring(11, 19) + " Z";
         }
 
         function switchTab(tabName) {
-            const tabs = ['takeoff', 'landing', 'tod', 'fuel', 'chk'];
+            const tabs = ['takeoff', 'landing', 'fuel', 'chk'];
             tabs.forEach(tab => {
                 document.getElementById(tab + '-section').classList.add('hidden');
                 document.getElementById(tab + '-tab').classList.replace('text-sky-400', 'text-slate-500');
                 document.getElementById(tab + '-tab').classList.replace('border-sky-500', 'border-transparent');
             });
-            
             document.getElementById(tabName + '-section').classList.remove('hidden');
             document.getElementById(tabName + '-tab').classList.replace('text-slate-500', 'text-sky-400');
             document.getElementById(tabName + '-tab').classList.replace('border-transparent', 'border-sky-500');
@@ -154,14 +125,27 @@
             });
         }
 
-        // --- GLOBAL RUNWAY FETCHER (OurAirports) ---
+        // --- Data Sync Between Tabs ---
+        function syncFields(sourceId, targetId) {
+            let val = document.getElementById(sourceId).value.toUpperCase();
+            document.getElementById(targetId).value = val;
+        }
+
+        // --- GLOBAL DATABASES (OurAirports) ---
         let globalRunwaysCSV = null;
+        let globalAirportsCSV = null;
 
         async function autoFetchRunways(type) {
-            let icao = document.getElementById(type + '-icao').value.toUpperCase();
+            let icao = document.getElementById(type === 'dep' ? 'dep-icao' : 'arr-icao').value.toUpperCase();
             let selectBox = document.getElementById(type + '-rwy-select');
             
-            if (icao.length !== 4) return;
+            // Clean reset if the user deletes characters
+            if (icao.length !== 4) {
+                selectBox.innerHTML = '<option value="manual">WAITING ICAO / MANUAL</option>';
+                document.getElementById(type + '-rwy-manual').classList.remove('hidden');
+                document.getElementById(type + '-hdg-manual').classList.remove('hidden');
+                return;
+            }
             
             selectBox.innerHTML = '<option>SEARCHING GLOBAL DB...</option>';
 
@@ -176,16 +160,13 @@
                 
                 for (let i = 1; i < lines.length; i++) {
                     let cols = lines[i].split(',');
-                    
                     if (cols.length > 18 && cols[2].replace(/"/g, '') === icao) {
                         let lengthFt = parseFloat(cols[3].replace(/"/g, ''));
                         if (isNaN(lengthFt)) continue;
-                        
                         let lengthM = Math.floor(lengthFt * 0.3048);
                         
                         let leIdent = cols[8].replace(/"/g, '');
                         let leHdg = parseFloat(cols[12].replace(/"/g, '')) || parseInt(leIdent.replace(/\D/g, '')) * 10;
-                        
                         let heIdent = cols[14].replace(/"/g, '');
                         let heHdg = parseFloat(cols[18].replace(/"/g, '')) || parseInt(heIdent.replace(/\D/g, '')) * 10;
                         
@@ -195,10 +176,8 @@
                 }
 
                 selectBox.innerHTML = '';
-                
                 if (foundRunways.length > 0) {
                     foundRunways.sort((a, b) => a.id.localeCompare(b.id));
-                    
                     foundRunways.forEach(rwy => {
                         let opt = document.createElement("option");
                         opt.value = `${rwy.len}|${rwy.hdg}`; 
@@ -217,14 +196,54 @@
             } catch (e) {
                 console.error("Runway fetch failed", e);
                 selectBox.innerHTML = '<option value="manual">API ERR - MANUAL ENTRY</option>';
-                document.getElementById(type + '-rwy-manual').classList.remove('hidden');
-                document.getElementById(type + '-hdg-manual').classList.remove('hidden');
             }
+        }
+
+        // --- Distance Physics ---
+        async function getAirportCoords(icao) {
+            if (!globalAirportsCSV) {
+                try {
+                    let res = await fetch("https://davidmegginson.github.io/ourairports-data/airports.csv");
+                    globalAirportsCSV = await res.text();
+                } catch(e) {
+                    console.error("Error fetching airports", e);
+                    return null;
+                }
+            }
+            let lines = globalAirportsCSV.split('\n');
+            for(let i=1; i<lines.length; i++) {
+                let row = lines[i];
+                if (row.includes(`"${icao}"`)) {
+                    let cols = [];
+                    let inQuotes = false;
+                    let val = "";
+                    for(let c=0; c<row.length; c++) {
+                        let char = row[c];
+                        if(char === '"') inQuotes = !inQuotes;
+                        else if(char === ',' && !inQuotes) { cols.push(val); val = ""; }
+                        else val += char;
+                    }
+                    cols.push(val);
+                    if (cols[1] === icao) return { lat: parseFloat(cols[4]), lon: parseFloat(cols[5]) };
+                }
+            }
+            return null;
+        }
+
+        function getDistanceNM(lat1, lon1, lat2, lon2) {
+            const R = 3440.065; // Radius of Earth in NM
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return R * c;
         }
 
         // --- VATSIM Live Auto-METAR Fetcher ---
         async function fetchMETAR(type) {
-            let icao = document.getElementById(type + '-icao').value.toUpperCase();
+            let icao = document.getElementById(type === 'dep' ? 'dep-icao' : 'arr-icao').value.toUpperCase();
             let btn = document.getElementById(type + '-metar-btn');
             
             if (icao.length === 4) {
@@ -235,22 +254,17 @@
                     let metarText = await response.text();
                     
                     if (metarText && metarText.includes(icao)) {
-                        let windDir = 0;
-                        let windSpd = 0;
-                        let temp = 15;
-
+                        let windDir = 0; let windSpd = 0; let temp = 15;
                         let windMatch = metarText.match(/(VRB|\d{3})(\d{2,3})(?:G\d{2,3})?KT/);
                         if (windMatch) {
                             windDir = windMatch[1] === 'VRB' ? 0 : parseInt(windMatch[1]);
                             windSpd = parseInt(windMatch[2]);
                         }
-
                         let tempMatch = metarText.match(/(M?\d{2})\/(M?\d{2})/);
                         if (tempMatch) {
                             let tStr = tempMatch[1];
                             temp = tStr.startsWith('M') ? -parseInt(tStr.substring(1)) : parseInt(tStr);
                         }
-                        
                         document.getElementById(type === 'dep' ? 'tk-wind-dir' : 'ld-wind-dir').value = windDir;
                         document.getElementById(type === 'dep' ? 'tk-wind-spd' : 'ld-wind-spd').value = windSpd;
                         document.getElementById(type === 'dep' ? 'tk-temp' : 'ld-temp').value = temp;
@@ -263,7 +277,6 @@
                         setTimeout(() => { btn.innerText = "GET METAR"; }, 3000);
                     }
                 } catch (e) {
-                    console.error("METAR fetch failed", e);
                     btn.innerText = "API ERROR";
                     setTimeout(() => { btn.innerText = "GET METAR"; }, 3000);
                 }
@@ -391,51 +404,52 @@
             document.getElementById('landing-results').classList.remove('hidden');
         }
 
-        // TOD Calculator
-        function calculateTOD() {
-            let crzAlt = parseFloat(document.getElementById('tod-crz').value);
-            let tgtAlt = parseFloat(document.getElementById('tod-tgt').value);
-            let gs = parseFloat(document.getElementById('tod-gs').value);
-            let vs = parseFloat(document.getElementById('tod-vs').value);
-
-            if (!crzAlt || isNaN(tgtAlt) || !gs || !vs) return alert("Please fill in all TOD fields.");
-            if (tgtAlt >= crzAlt) return alert("Target altitude must be lower than cruise altitude.");
-
-            let altToLose = crzAlt - tgtAlt;
-            let timeMins = altToLose / vs;
-            let distNM = timeMins * (gs / 60);
-
-            document.getElementById('tod-dist').innerText = Math.ceil(distNM) + " NM";
-            document.getElementById('tod-time').innerText = Math.ceil(timeMins) + " mins";
-            document.getElementById('tod-results').classList.remove('hidden');
-        }
-
-        // Fuel Calculator
-        function calculateFuel() {
+        // --- UPDATED GPS FUEL CALCULATOR ---
+        async function calculateFuel() {
+            let depIcao = document.getElementById('fuel-dep').value.toUpperCase();
+            let arrIcao = document.getElementById('fuel-arr').value.toUpperCase();
             let acType = document.getElementById('aircraft-select').value;
-            let burnRate = aircraftDB[acType].burn;
-
-            let flightHrs = parseFloat(document.getElementById('fuel-hrs').value) || 0;
-            let flightMins = parseFloat(document.getElementById('fuel-mins').value) || 0;
-            let reserveMins = parseFloat(document.getElementById('fuel-res').value) || 45;
-            let contPct = parseFloat(document.getElementById('fuel-cont').value) || 5;
-
-            if (flightHrs === 0 && flightMins === 0) return alert("Please enter estimated flight time.");
-
-            let totalFlightHrs = flightHrs + (flightMins / 60);
+            let ac = aircraftDB[acType];
             
-            let tripFuel = totalFlightHrs * burnRate;
-            let reserveFuel = (reserveMins / 60) * burnRate;
-            let contFuel = tripFuel * (contPct / 100);
-            let taxiFuel = burnRate * 0.1;
+            let reserveMins = parseFloat(document.getElementById('fuel-res').value) || 45;
 
-            let totalFuel = tripFuel + reserveFuel + contFuel + taxiFuel;
+            if (depIcao.length !== 4 || arrIcao.length !== 4) return alert("Please enter valid 4-letter ICAOs for departure and arrival.");
+            
+            let btn = document.getElementById('fuel-calc-btn');
+            btn.innerText = "CALCULATING ROUTES...";
 
-            document.getElementById('fuel-trip-out').innerText = Math.ceil(tripFuel).toLocaleString() + " kg";
-            document.getElementById('fuel-res-out').innerText = Math.ceil(reserveFuel).toLocaleString() + " kg";
-            document.getElementById('fuel-cont-out').innerText = Math.ceil(contFuel).toLocaleString() + " kg";
-            document.getElementById('fuel-taxi-out').innerText = Math.ceil(taxiFuel).toLocaleString() + " kg";
-            document.getElementById('fuel-total-out').innerText = Math.ceil(totalFuel).toLocaleString() + " kg";
+            let depCoords = await getAirportCoords(depIcao);
+            let arrCoords = await getAirportCoords(arrIcao);
+
+            btn.innerText = "CALCULATE BLOCK FUEL";
+
+            if (!depCoords || !arrCoords) return alert("Could not locate coordinates for one or both airports in the global database.");
+
+            // Base Math
+            let distNM = getDistanceNM(depCoords.lat, depCoords.lon, arrCoords.lat, arrCoords.lon);
+            let standardRouteDistNM = distNM * 1.05; // Adds 5% distance for SIDs/STARs
+            
+            // Time Math (Using Aircraft specific True Airspeed)
+            let flightHrs = standardRouteDistNM / ac.tas;
+            let flightMins = Math.round(flightHrs * 60);
+            
+            // Fuel blocks
+            let baseTripFuel = (distNM / ac.tas) * ac.burn;
+            let stdTripFuel = flightHrs * ac.burn;
+            
+            let reserveFuel = (reserveMins / 60) * ac.burn;
+            let taxiFuel = ac.burn * 0.1; // ~6 mins ground ops
+
+            let minFuel = baseTripFuel + reserveFuel + taxiFuel;
+            let stdFuel = stdTripFuel + reserveFuel + (stdTripFuel * 0.05) + taxiFuel; // +5% Dist, +5% Cont
+            let hvyFuel = stdTripFuel + reserveFuel + (stdTripFuel * 0.15) + taxiFuel; // +5% Dist, +15% Cont (WX/Hold)
+
+            document.getElementById('fuel-dist-out').innerText = Math.round(distNM) + " NM";
+            document.getElementById('fuel-time-out').innerText = `${Math.floor(flightMins / 60)}h ${flightMins % 60}m`;
+            
+            document.getElementById('fuel-min-out').innerText = Math.ceil(minFuel).toLocaleString() + " kg";
+            document.getElementById('fuel-std-out').innerText = Math.ceil(stdFuel).toLocaleString() + " kg";
+            document.getElementById('fuel-heavy-out').innerText = Math.ceil(hvyFuel).toLocaleString() + " kg";
             
             document.getElementById('fuel-results').classList.remove('hidden');
         }
@@ -454,7 +468,7 @@
                 <span class="text-sky-400">METAR LIVE</span>
             </div>
             <div class="flex gap-3">
-                <span id="sys-time">00:00 Z</span>
+                <span id="sys-time">00:00:00 Z</span>
                 <span>🔋 98%</span>
             </div>
         </div>
@@ -487,7 +501,6 @@
         <div class="flex bg-slate-900 border-b border-slate-800">
             <button id="takeoff-tab" onclick="switchTab('takeoff')" class="flex-1 py-3 text-xs md:text-sm font-bold uppercase tracking-wider text-sky-400 border-b-2 border-sky-500 transition">DEP</button>
             <button id="landing-tab" onclick="switchTab('landing')" class="flex-1 py-3 text-xs md:text-sm font-bold uppercase tracking-wider text-slate-500 border-b-2 border-transparent transition">ARR</button>
-            <button id="tod-tab" onclick="switchTab('tod')" class="flex-1 py-3 text-xs md:text-sm font-bold uppercase tracking-wider text-slate-500 border-b-2 border-transparent transition">TOD</button>
             <button id="fuel-tab" onclick="switchTab('fuel')" class="flex-1 py-3 text-xs md:text-sm font-bold uppercase tracking-wider text-slate-500 border-b-2 border-transparent transition">FUEL</button>
             <button id="chk-tab" onclick="switchTab('chk')" class="flex-1 py-3 text-xs md:text-sm font-bold uppercase tracking-wider text-slate-500 border-b-2 border-transparent transition">CHK</button>
         </div>
@@ -498,7 +511,7 @@
                 <div class="col-span-2 p-3 bg-slate-800 rounded border border-slate-700">
                     <span class="efb-label block mb-2 text-sky-300">Runway Specs</span>
                     <div class="flex gap-2 mb-2">
-                        <input id="dep-icao" type="text" onkeyup="autoFetchRunways('dep')" placeholder="ICAO (EGLL)" class="efb-input w-20 p-2 rounded uppercase text-center">
+                        <input id="dep-icao" type="text" oninput="syncFields('dep-icao', 'fuel-dep'); autoFetchRunways('dep')" placeholder="ICAO (EGLL)" class="efb-input w-20 p-2 rounded uppercase text-center">
                         <select id="dep-rwy-select" class="efb-input flex-1 p-2 rounded"><option value="manual">WAITING ICAO</option></select>
                     </div>
                     <div class="flex gap-2">
@@ -559,7 +572,7 @@
                 <div class="col-span-2 p-3 bg-slate-800 rounded border border-slate-700">
                     <span class="efb-label block mb-2 text-sky-300">Runway Specs</span>
                     <div class="flex gap-2 mb-2">
-                        <input id="arr-icao" type="text" onkeyup="autoFetchRunways('arr')" placeholder="ICAO" class="efb-input w-20 p-2 rounded uppercase text-center">
+                        <input id="arr-icao" type="text" oninput="syncFields('arr-icao', 'fuel-arr'); autoFetchRunways('arr')" placeholder="ICAO" class="efb-input w-20 p-2 rounded uppercase text-center">
                         <select id="arr-rwy-select" class="efb-input flex-1 p-2 rounded"><option value="manual">WAITING ICAO</option></select>
                     </div>
                     <div class="flex gap-2">
@@ -625,85 +638,61 @@
             </div>
         </div>
 
-        <!-- TOD CALCULATOR SECTION -->
-        <div id="tod-section" class="p-5 flex-1 overflow-y-auto hidden">
-            <div class="grid grid-cols-2 gap-4 mb-5">
-                <div class="col-span-2 md:col-span-1 p-4 bg-slate-800 rounded border border-slate-700">
-                    <span class="efb-label block mb-3 text-sky-300">Altitudes (ft)</span>
-                    <input id="tod-crz" type="number" placeholder="Cruise Alt (e.g. 36000)" class="efb-input w-full p-3 rounded mb-3 text-lg text-center">
-                    <input id="tod-tgt" type="number" placeholder="Target Alt (e.g. 3000)" class="efb-input w-full p-3 rounded text-lg text-center">
-                </div>
-                <div class="col-span-2 md:col-span-1 p-4 bg-slate-800 rounded border border-slate-700">
-                    <span class="efb-label block mb-3 text-sky-300">Performance</span>
-                    <input id="tod-gs" type="number" placeholder="Ground Speed (kt)" class="efb-input w-full p-3 rounded mb-3 text-lg text-center">
-                    <input id="tod-vs" type="number" value="2000" placeholder="Descent Rate (fpm)" class="efb-input w-full p-3 rounded text-lg text-center">
-                </div>
-            </div>
-            <button onclick="calculateTOD()" class="w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold py-3 rounded border border-sky-400 shadow-md transition uppercase tracking-widest">Calculate TOD</button>
-            <div id="tod-results" class="mt-5 p-5 border border-slate-700 rounded bg-slate-900 hidden flex justify-around text-center">
-                <div>
-                    <span class="efb-label block mb-1">DIST TO DESCEND</span>
-                    <span id="tod-dist" class="font-mono text-3xl text-sky-400 font-bold"></span>
-                </div>
-                <div>
-                    <span class="efb-label block mb-1">TIME TO DESCEND</span>
-                    <span id="tod-time" class="font-mono text-3xl text-emerald-400 font-bold"></span>
-                </div>
-            </div>
-        </div>
-
         <!-- FUEL CALCULATOR SECTION -->
         <div id="fuel-section" class="p-5 flex-1 overflow-y-auto hidden">
             <div class="grid grid-cols-2 gap-4 mb-5">
                 <div class="col-span-2 p-4 bg-slate-800 rounded border border-slate-700">
-                    <span class="efb-label block mb-3 text-sky-300">Flight Time (EET)</span>
+                    <span class="efb-label block mb-3 text-sky-300">Route Planning</span>
                     <div class="flex gap-4">
                         <div class="w-1/2">
-                            <span class="text-[0.6rem] text-slate-400 block mb-1">HOURS</span>
-                            <input id="fuel-hrs" type="number" placeholder="0" class="efb-input w-full p-3 rounded text-center">
+                            <span class="text-[0.6rem] text-slate-400 block mb-1">DEP ICAO</span>
+                            <input id="fuel-dep" type="text" oninput="syncFields('fuel-dep', 'dep-icao'); autoFetchRunways('dep')" placeholder="EGLL" class="efb-input w-full p-3 rounded text-center uppercase">
                         </div>
                         <div class="w-1/2">
-                            <span class="text-[0.6rem] text-slate-400 block mb-1">MINUTES</span>
-                            <input id="fuel-mins" type="number" placeholder="0" class="efb-input w-full p-3 rounded text-center">
+                            <span class="text-[0.6rem] text-slate-400 block mb-1">ARR ICAO</span>
+                            <input id="fuel-arr" type="text" oninput="syncFields('fuel-arr', 'arr-icao'); autoFetchRunways('arr')" placeholder="KJFK" class="efb-input w-full p-3 rounded text-center uppercase">
                         </div>
                     </div>
                 </div>
                 <div class="col-span-2 p-4 bg-slate-800 rounded border border-slate-700">
-                    <span class="efb-label block mb-3 text-sky-300">Reserves & Contingency</span>
-                    <div class="flex gap-4">
-                        <div class="w-1/2">
-                            <span class="text-[0.6rem] text-slate-400 block mb-1">RESERVE (MINS)</span>
-                            <input id="fuel-res" type="number" value="45" class="efb-input w-full p-3 rounded text-center">
-                        </div>
-                        <div class="w-1/2">
-                            <span class="text-[0.6rem] text-slate-400 block mb-1">CONTINGENCY (%)</span>
-                            <input id="fuel-cont" type="number" value="5" class="efb-input w-full p-3 rounded text-center">
-                        </div>
+                    <span class="efb-label block mb-3 text-sky-300">Reserve Rule</span>
+                    <div class="w-full">
+                        <span class="text-[0.6rem] text-slate-400 block mb-1">FINAL RESERVE (MINS)</span>
+                        <input id="fuel-res" type="number" value="45" class="efb-input w-full p-3 rounded text-center">
                     </div>
                 </div>
             </div>
-            <button onclick="calculateFuel()" class="w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold py-3 rounded border border-sky-400 shadow-md transition uppercase tracking-widest">Calculate Block Fuel</button>
+            <button id="fuel-calc-btn" onclick="calculateFuel()" class="w-full bg-[#0284c7] hover:bg-[#0369a1] text-white font-bold py-3 rounded border border-sky-400 shadow-md transition uppercase tracking-widest">Calculate Block Fuel</button>
             <div id="fuel-results" class="mt-5 border border-slate-700 rounded bg-slate-900 hidden">
+                <div class="flex justify-between items-center p-3 bg-slate-800 border-b border-slate-700 text-sm">
+                    <span class="efb-label">ROUTE DISTANCE</span>
+                    <span id="fuel-dist-out" class="font-mono text-emerald-400 font-bold"></span>
+                </div>
+                <div class="flex justify-between items-center p-3 bg-slate-800 border-b border-slate-700 text-sm">
+                    <span class="efb-label">EST FLIGHT TIME</span>
+                    <span id="fuel-time-out" class="font-mono text-emerald-400 font-bold"></span>
+                </div>
                 <div class="p-4 flex flex-col gap-3">
                     <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                        <span class="efb-label text-slate-400">TRIP FUEL</span>
-                        <span id="fuel-trip-out" class="font-mono text-lg text-white"></span>
+                        <div class="flex flex-col">
+                            <span class="efb-label text-slate-400">MINIMUM BLOCK</span>
+                            <span class="text-[0.55rem] text-slate-500">Direct Route + Res</span>
+                        </div>
+                        <span id="fuel-min-out" class="font-mono text-lg text-white"></span>
                     </div>
                     <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                        <span class="efb-label text-slate-400">RESERVE (IFR/ALTN)</span>
-                        <span id="fuel-res-out" class="font-mono text-lg text-white"></span>
-                    </div>
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                        <span class="efb-label text-slate-400">CONTINGENCY</span>
-                        <span id="fuel-cont-out" class="font-mono text-lg text-white"></span>
-                    </div>
-                    <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-                        <span class="efb-label text-slate-400">TAXI / APU</span>
-                        <span id="fuel-taxi-out" class="font-mono text-lg text-white"></span>
+                        <div class="flex flex-col">
+                            <span class="efb-label text-sky-400">STANDARD BLOCK</span>
+                            <span class="text-[0.55rem] text-slate-500">SID/STAR + 5% Cont + Res</span>
+                        </div>
+                        <span id="fuel-std-out" class="font-mono text-xl text-sky-400 font-bold"></span>
                     </div>
                     <div class="flex justify-between items-center pt-2">
-                        <span class="efb-label text-sky-400 text-sm">TOTAL BLOCK FUEL</span>
-                        <span id="fuel-total-out" class="font-mono text-2xl text-sky-400 font-bold"></span>
+                        <div class="flex flex-col">
+                            <span class="efb-label text-amber-400">HEAVY WX / HOLD</span>
+                            <span class="text-[0.55rem] text-slate-500">SID/STAR + 15% Cont + Res</span>
+                        </div>
+                        <span id="fuel-heavy-out" class="font-mono text-xl text-amber-400 font-bold"></span>
                     </div>
                 </div>
             </div>
