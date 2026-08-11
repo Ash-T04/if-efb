@@ -153,21 +153,38 @@
             }
         }
 
-        // --- NEW: Live Auto-METAR Fetcher ---
+       // --- NEW: Live Auto-METAR Fetcher ---
         async function fetchMETAR(type) {
             let icao = document.getElementById(type + '-icao').value.toUpperCase();
             let btn = document.getElementById(type + '-metar-btn');
+            
             if (icao.length === 4) {
                 btn.innerText = "FETCHING...";
                 try {
-                    // Pulling real-world live METAR from AviationWeather JSON API
+                    // Pulling real-world live METAR from AviationWeather API
                     let response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}&format=json`);
+                    
+                    // The server returns 204 if the airport is valid but has no weather data
+                    if (response.status === 204) {
+                        btn.innerText = "NO WEATHER";
+                        setTimeout(() => { btn.innerText = "GET METAR"; }, 3000);
+                        return;
+                    }
+                    
                     let data = await response.json();
+                    
                     if (data && data.length > 0) {
                         let metar = data[0];
-                        document.getElementById(type === 'dep' ? 'tk-wind-dir' : 'ld-wind-dir').value = metar.wdir === 'VRB' ? 0 : metar.wdir;
-                        document.getElementById(type === 'dep' ? 'tk-wind-spd' : 'ld-wind-spd').value = metar.wspd;
-                        if(type === 'dep') document.getElementById('tk-temp').value = metar.temp;
+                        
+                        // Handle variable or missing wind data safely
+                        let windDir = (metar.wdir === 'VRB' || metar.wdir === null) ? 0 : metar.wdir;
+                        let windSpd = metar.wspd || 0;
+                        let temp = metar.temp || 15;
+                        
+                        document.getElementById(type === 'dep' ? 'tk-wind-dir' : 'ld-wind-dir').value = windDir;
+                        document.getElementById(type === 'dep' ? 'tk-wind-spd' : 'ld-wind-spd').value = windSpd;
+                        if(type === 'dep') document.getElementById('tk-temp').value = temp;
+                        
                         btn.innerText = "METAR OK";
                         btn.classList.replace("bg-slate-700", "bg-emerald-600");
                         setTimeout(() => { btn.innerText = "GET METAR"; btn.classList.replace("bg-emerald-600", "bg-slate-700"); }, 3000);
@@ -184,7 +201,6 @@
                 alert("Please enter a valid 4-letter ICAO code first.");
             }
         }
-
         // --- NEW: Interactive Checklists Toggle ---
         function toggleCheck(el) {
             el.classList.toggle('border-emerald-500');
