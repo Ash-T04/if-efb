@@ -153,7 +153,7 @@
             }
         }
 
-        // --- NEW: Live Auto-METAR Fetcher ---
+      // --- NEW: VATSIM Live Auto-METAR Fetcher ---
         async function fetchMETAR(type) {
             let icao = document.getElementById(type + '-icao').value.toUpperCase();
             let btn = document.getElementById(type + '-metar-btn');
@@ -161,25 +161,34 @@
             if (icao.length === 4) {
                 btn.innerText = "FETCHING...";
                 try {
-                    // Pulling real-world live METAR from AviationWeather API
-                    let response = await fetch(`https://aviationweather.gov/api/data/metar?ids=${icao}&format=json`);
+                    // Bypassing strict government CORS by using VATSIM's flight sim network
+                    let response = await fetch(`https://metar.vatsim.net/metar.php?id=${icao}`);
                     
-                    if (response.status === 204) {
-                        btn.innerText = "NO WEATHER";
-                        setTimeout(() => { btn.innerText = "GET METAR"; }, 3000);
-                        return;
-                    }
+                    if (!response.ok) throw new Error("Network offline");
                     
-                    let data = await response.json();
+                    let metarText = await response.text();
                     
-                    if (data && data.length > 0) {
-                        let metar = data[0];
+                    // If the text contains the airport code, it's a valid METAR
+                    if (metarText && metarText.includes(icao)) {
+                        let windDir = 0;
+                        let windSpd = 0;
+                        let temp = 15;
+
+                        // 1. Extract Wind (e.g., 27008KT, VRB05KT, or 12015G25KT)
+                        let windMatch = metarText.match(/(VRB|\d{3})(\d{2,3})(?:G\d{2,3})?KT/);
+                        if (windMatch) {
+                            windDir = windMatch[1] === 'VRB' ? 0 : parseInt(windMatch[1]);
+                            windSpd = parseInt(windMatch[2]);
+                        }
+
+                        // 2. Extract Temperature (e.g., 16/11 or M02/M05 for negatives)
+                        let tempMatch = metarText.match(/(M?\d{2})\/(M?\d{2})/);
+                        if (tempMatch) {
+                            let tStr = tempMatch[1];
+                            temp = tStr.startsWith('M') ? -parseInt(tStr.substring(1)) : parseInt(tStr);
+                        }
                         
-                        let windDir = (metar.wdir === 'VRB' || metar.wdir === null) ? 0 : metar.wdir;
-                        let windSpd = metar.wspd || 0;
-                        let temp = metar.temp || 15;
-                        
-                        // Properly fill all three boxes dynamically for both tk- and ld- inputs
+                        // Push to the dashboard
                         document.getElementById(type === 'dep' ? 'tk-wind-dir' : 'ld-wind-dir').value = windDir;
                         document.getElementById(type === 'dep' ? 'tk-wind-spd' : 'ld-wind-spd').value = windSpd;
                         document.getElementById(type === 'dep' ? 'tk-temp' : 'ld-temp').value = temp;
@@ -200,7 +209,6 @@
                 alert("Please enter a valid 4-letter ICAO code first.");
             }
         }
-
         function toggleCheck(el) {
             el.classList.toggle('border-emerald-500');
             el.classList.toggle('text-emerald-400');
